@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
 
 class OtpCodeScreen extends StatelessWidget {
+  OtpCodeScreen({required this.userEmail});
+  String userEmail;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   @override
@@ -43,7 +45,7 @@ class OtpCodeScreen extends StatelessWidget {
                               Color.fromARGB(255, 103, 103, 91).withOpacity(.6),
                           fontSize: 14,
                           fontWeight: FontWeight.bold)),
-                  Text("abhishek@gmail.com",
+                  Text(userEmail,
                       style: interTextStyle(
                           color: Colors.black,
                           fontSize: 14,

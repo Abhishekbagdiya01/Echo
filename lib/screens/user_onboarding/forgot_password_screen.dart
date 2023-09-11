@@ -48,7 +48,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OtpCodeScreen(),
+                      builder: (context) =>
+                          OtpCodeScreen(userEmail: emailController.text),
                     ));
               } else {
                 snackbarMessenger(context, "Please fill the email field");
