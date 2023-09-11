@@ -1,3 +1,4 @@
+import 'package:echo/route/on_generated_routes.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
 // import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/utils/colors.dart';
@@ -19,7 +20,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      onGenerateRoute: OnGeneratedRoutes.route,
+      routes: {
+        "/": (context) {
+          return SplashScreen();
+        }
+      },
     );
   }
 }

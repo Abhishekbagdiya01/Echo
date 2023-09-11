@@ -8,4 +8,5 @@ const bottomLogoColor = Color.fromARGB(158, 220, 219, 206);
 const primaryColor = Color.fromARGB(236, 248, 249, 226);
 
 //Text colors
+const goldenThemeColor = Color.fromARGB(255, 122, 118, 5);
 const blackColor = Colors.black;

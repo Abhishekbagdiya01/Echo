@@ -45,7 +45,7 @@ class _FormFieldState extends State<InputFormField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: InputDecoration(
         focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(100, 186, 183, 108))),
+            borderSide: BorderSide(color: Color(0xFFBAB86C))),
         enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Color.fromARGB(100, 186, 183, 108))),
         hintText: widget.hintText,

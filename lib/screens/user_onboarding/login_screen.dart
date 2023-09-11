@@ -1,3 +1,5 @@
+import 'package:echo/route/page_const.dart';
+import 'package:echo/screens/user_onboarding/forgot_password_screen.dart';
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
@@ -49,10 +51,13 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, PageConst.ForgotPasswordScreen);
+                      },
                       child: Text(
                         "Forget password ?",
-                        style: interTextStyle(color: Colors.grey),
+                        style: interTextStyle(color: goldenThemeColor),
                       ),
                     ),
                   ),
@@ -67,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Don't have an account ?",
-                        style: interTextStyle(color: topLogoColor),
+                        style: interTextStyle(color: goldenThemeColor),
                       ),
                       TextButton(
                         onPressed: () {
