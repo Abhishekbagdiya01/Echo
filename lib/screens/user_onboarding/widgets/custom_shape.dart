@@ -1,22 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../widgets/logo.dart';
 
-class CustomShape extends StatelessWidget {
-  CustomShape({
-    required this.height,
+class UpperShape extends StatelessWidget {
+  UpperShape({
     super.key,
   });
-  double height;
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: CustomShapePainter(),
-      child: Container(
-        height: height,
-        child: EchoLogo(),
-        // EchoLogo(titleSize: 50, descSize: 25)
+      child: Stack(
+        children: [
+          SizedBox(
+            child: SvgPicture.asset(
+              "assets/images/upper_shape.svg",
+              // height: MediaQuery.sizeOf(context).height * .30,
+              width: MediaQuery.sizeOf(context).width,
+            ),
+          ),
+          Positioned(
+              top: MediaQuery.sizeOf(context).height * 0.05,
+              left: MediaQuery.sizeOf(context).width * 0.15,
+              child: EchoLogo())
+        ],
       ),
+    );
+  }
+}
+
+class BottomShape extends StatelessWidget {
+  const BottomShape({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      "assets/images/bottom_shape.svg",
+      width: MediaQuery.sizeOf(context).width,
     );
   }
 }

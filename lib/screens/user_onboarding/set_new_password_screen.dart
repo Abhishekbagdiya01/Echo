@@ -1,11 +1,8 @@
 import 'dart:developer';
 
-import 'package:echo/route/page_const.dart';
-import 'package:echo/screens/user_onboarding/forgot_password_screen.dart';
-import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
-import 'package:echo/utils/colors.dart';
+
 import 'package:echo/widgets/snackbar.dart';
 import 'package:echo/widgets/text_styles.dart';
 
@@ -14,16 +11,19 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
 
 class SetNewPasswordScreen extends StatelessWidget {
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CustomShape(height: 250),
+            UpperShape(),
             Text("New Password",
                 style: interTextStyle(
                     color: Color.fromARGB(255, 103, 103, 91),
@@ -68,7 +68,8 @@ class SetNewPasswordScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            BottomShape()
           ],
         ),
       ),

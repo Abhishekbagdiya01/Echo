@@ -9,8 +9,8 @@ class CustomButton extends StatelessWidget {
     required this.title,
     super.key,
   });
-  VoidCallback voidCallback;
-  String title;
+  final VoidCallback voidCallback;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return InkWell(

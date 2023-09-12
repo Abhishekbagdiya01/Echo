@@ -1,9 +1,8 @@
-import 'package:echo/route/page_const.dart';
 import 'package:echo/screens/user_onboarding/set_new_password_screen.dart';
 
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
-import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
+
 import 'package:echo/utils/colors.dart';
 import 'package:echo/widgets/text_styles.dart';
 
@@ -13,9 +12,9 @@ import '../../widgets/custom_button.dart';
 
 class OtpCodeScreen extends StatelessWidget {
   OtpCodeScreen({required this.userEmail});
-  String userEmail;
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+   final String userEmail;
+ final TextEditingController usernameController = TextEditingController();
+ final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
@@ -23,8 +22,9 @@ class OtpCodeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CustomShape(height: 250),
+            UpperShape(),
             SizedBox(
               height: 10,
             ),
@@ -90,6 +90,7 @@ class OtpCodeScreen extends StatelessWidget {
                 ],
               ),
             ),
+            BottomShape()
           ],
         ),
       ),

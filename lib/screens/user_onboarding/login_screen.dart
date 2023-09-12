@@ -1,5 +1,4 @@
 import 'package:echo/route/page_const.dart';
-import 'package:echo/screens/user_onboarding/forgot_password_screen.dart';
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
@@ -11,8 +10,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_button.dart';
 
 class LoginScreen extends StatelessWidget {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -21,7 +20,7 @@ class LoginScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomShape(height: 250),
+            UpperShape(),
             Text("Welcome back!",
                 style: interTextStyle(
                     color: Color.fromARGB(255, 103, 103, 91),
@@ -92,7 +91,8 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            BottomShape()
           ],
         ),
       ),

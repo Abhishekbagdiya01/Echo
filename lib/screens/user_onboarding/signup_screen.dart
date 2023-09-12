@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomShape(height: 200),
+            UpperShape(),
             Text("Create Account",
                 style: interTextStyle(
                     color: Color.fromARGB(255, 103, 103, 91),

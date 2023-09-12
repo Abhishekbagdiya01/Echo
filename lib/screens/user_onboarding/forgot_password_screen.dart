@@ -9,54 +9,59 @@ import '../../widgets/custom_button.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});
-  TextEditingController emailController = TextEditingController();
+  final emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          CustomShape(height: 250),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Forgot password",
-            style: interTextStyle(
-                color: Color.fromARGB(255, 103, 103, 91),
-                fontSize: 24,
-                fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: InputFormField(
-              controller: emailController,
-              hintText: "E-mail",
-              inputType: TextInputType.emailAddress,
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            UpperShape(),
+            SizedBox(
+              height: 10,
             ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          CustomButton(
-            title: "Send",
-            voidCallback: () {
-              if (emailController.text.isNotEmpty) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          OtpCodeScreen(userEmail: emailController.text),
-                    ));
-              } else {
-                snackbarMessenger(context, "Please fill the email field");
-              }
-            },
-          ),
-        ],
+            Text(
+              "Forgot password",
+              style: interTextStyle(
+                  color: Color.fromARGB(255, 103, 103, 91),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: InputFormField(
+                controller: emailController,
+                hintText: "E-mail",
+                inputType: TextInputType.emailAddress,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            CustomButton(
+              title: "Send",
+              voidCallback: () {
+                if (emailController.text.isNotEmpty) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            OtpCodeScreen(userEmail: emailController.text),
+                      ));
+                } else {
+                  snackbarMessenger(context, "Please fill the email field");
+                }
+              },
+            ),
+            BottomShape()
+          ],
+        ),
       ),
     );
   }
