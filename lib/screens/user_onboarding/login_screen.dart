@@ -65,7 +65,10 @@ class LoginScreen extends StatelessWidget {
                   ),
                   CustomButton(
                     title: "Login",
-                    voidCallback: () {},
+                    voidCallback: () {
+                      Navigator.pushReplacementNamed(
+                          context, PageConst.ResponsiveLayout);
+                    },
                   ),
                   Row(
                     children: [

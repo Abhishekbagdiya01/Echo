@@ -108,19 +108,26 @@ class ProfileScreen extends StatelessWidget {
             // POST
 
             Expanded(
-                child: TabBarView(children: [
-              postCard(
-                  username: "Abhishek",
-                  location: "Blue City",
-                  content: "",
-                  postType: "Audio"),
-              postCard(
-                  username: "Abhishek",
-                  location: "Jodhpur",
-                  content:
-                      "Yeh jo has rahi hai duniya meri naakamiyon pe , Taane kas rahi hai duniya meri naadaniyon pe Par main kaam kar raha hoon meri saari khaamiyon pe Kal yeh maarenge taali meri kahaniyon pe Kal jo badlegi hava, yeh saale sharmayenge Humare apne ho,” keh ke yeh baahein garmayenge",
-                  postType: "Text")
-            ]))
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TabBarView(children: [
+                postCard(
+                    username: "Abhishek",
+                    location: "Blue City",
+                    content: "",
+                    postType: "Audio"),
+                ListView(
+                  children: [
+                    postCard(
+                        username: "Abhishek",
+                        location: "Jodhpur",
+                        content:
+                            "Yeh jo has rahi hai duniya meri naakamiyon pe , Taane kas rahi hai duniya meri naadaniyon pe Par main kaam kar raha hoon meri saari khaamiyon pe Kal yeh maarenge taali meri kahaniyon pe Kal jo badlegi hava, yeh saale sharmayenge Humare apne ho,” keh ke yeh baahein garmayenge",
+                        postType: "Text"),
+                  ],
+                )
+              ]),
+            ))
           ],
         ),
       ),

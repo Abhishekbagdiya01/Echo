@@ -25,6 +25,7 @@ class postCard extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
+              boxShadow: [BoxShadow(color: goldenThemeColor)],
               border: Border.all(color: Colors.grey)),
           child: Column(
             children: [
@@ -105,7 +106,7 @@ class postCard extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 20,
         ),
       ],
     );

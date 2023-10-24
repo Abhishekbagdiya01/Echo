@@ -1,8 +1,10 @@
+import 'package:echo/responsive/responsive_layout.dart';
 import 'package:echo/route/page_const.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
 import 'package:echo/screens/user_onboarding/forgot_password_screen.dart';
 import 'package:echo/screens/user_onboarding/login_screen.dart';
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
+import 'package:echo/screens/upload_post_screen.dart';
 import 'package:flutter/material.dart';
 
 class OnGeneratedRoutes {
@@ -26,6 +28,18 @@ class OnGeneratedRoutes {
         {
           return MaterialPageRoute(
             builder: (_) => ForgotPasswordScreen(),
+          );
+        }
+      case PageConst.UploadPostScreen:
+        {
+          return MaterialPageRoute(
+            builder: (_) => UploadPostScreen(),
+          );
+        }
+      case PageConst.ResponsiveLayout:
+        {
+          return MaterialPageRoute(
+            builder: (_) => ResponsiveLayout(),
           );
         }
       default:

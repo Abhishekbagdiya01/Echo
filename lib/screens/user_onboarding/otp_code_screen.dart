@@ -12,9 +12,9 @@ import '../../widgets/custom_button.dart';
 
 class OtpCodeScreen extends StatelessWidget {
   OtpCodeScreen({required this.userEmail});
-   final String userEmail;
- final TextEditingController usernameController = TextEditingController();
- final TextEditingController passwordController = TextEditingController();
+  final String userEmail;
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
@@ -90,7 +90,9 @@ class OtpCodeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            BottomShape()
+            SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.50,
+                child: BottomShape())
           ],
         ),
       ),

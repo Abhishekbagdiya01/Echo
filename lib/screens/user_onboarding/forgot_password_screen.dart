@@ -16,8 +16,8 @@ class ForgotPasswordScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
+        clipBehavior: Clip.none,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             UpperShape(),
             SizedBox(
@@ -59,7 +59,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 }
               },
             ),
-            BottomShape()
+            SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.50,
+                child: BottomShape())
           ],
         ),
       ),

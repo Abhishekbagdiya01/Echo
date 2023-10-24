@@ -1,3 +1,4 @@
+import 'package:echo/route/page_const.dart';
 import 'package:echo/utils/global_variables.dart';
 import 'package:echo/widgets/post_card.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,9 @@ class HomeScreen extends StatelessWidget {
           actions: [
             IconButton(
                 icon: Image.asset("assets/images/add_post_icon.png"),
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.pushNamed(context, PageConst.UploadPostScreen);
+                }),
             IconButton(
                 icon: Image.asset("assets/images/chat_icon.png"),
                 onPressed: () {}),

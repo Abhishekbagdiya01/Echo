@@ -20,6 +20,7 @@ class SetNewPasswordScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
+        clipBehavior: Clip.none,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -69,7 +70,9 @@ class SetNewPasswordScreen extends StatelessWidget {
                 ],
               ),
             ),
-            BottomShape()
+            SizedBox(
+                height: MediaQuery.sizeOf(context).height * .40,
+                child: BottomShape())
           ],
         ),
       ),
