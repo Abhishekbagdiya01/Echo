@@ -4,18 +4,27 @@ import 'package:echo/widgets/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class postCard extends StatelessWidget {
+class postCard extends StatefulWidget {
   postCard({
     Key? key,
     required this.username,
+    required this.profileUrl,
     required this.location,
     required this.content,
     required this.postType,
   }) : super(key: key);
   final String username;
+  final String profileUrl;
   final String location;
   final String content;
   final String postType;
+
+  @override
+  State<postCard> createState() => _postCardState();
+}
+
+class _postCardState extends State<postCard> {
+  bool isLike = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +39,17 @@ class postCard extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                leading: const CircleAvatar(
+                leading: CircleAvatar(
                   radius: 30,
+                  backgroundImage: NetworkImage(widget.profileUrl),
                 ),
                 title: Text(
-                  username,
+                  widget.username,
                   style: GoogleFonts.roboto(
                       fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
-                  location,
+                  widget.location,
                   style: GoogleFonts.roboto(fontSize: 18, color: Colors.grey),
                 ),
                 trailing: OutlinedButton(
@@ -51,34 +61,54 @@ class postCard extends StatelessWidget {
               // CONTENT PART
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: postType == "Text"
+                child: widget.postType == "Text"
                     ? Text(
-                        content,
+                        widget.content,
                         style: GoogleFonts.roboto(
                             fontSize: 15, fontWeight: FontWeight.w600),
                       )
-                    : AudioPlayerLayout(audioUrl: content),
+                    : AudioPlayerLayout(audioUrl: widget.content),
               ),
               const Divider(
                 thickness: 2,
               ),
               ListTile(
-                leading: SizedBox(
-                    width: MediaQuery.sizeOf(context).width * .45,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.thumb_up),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Like",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        )
-                      ],
-                    )),
+                leading: InkWell(
+                  onTap: () {
+                    if (isLike) {
+                      isLike = false;
+                      setState(() {});
+                    } else {
+                      isLike = true;
+                      setState(() {});
+                    }
+                  },
+                  child: SizedBox(
+                      width: MediaQuery.sizeOf(context).width * .45,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.thumb_up,
+                            color: isLike
+                                ? Colors.red
+                                : Colors.black.withOpacity(0.6),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            isLike ? "13" : "12",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: isLike
+                                    ? Colors.red
+                                    : Colors.black.withOpacity(0.6)),
+                          )
+                        ],
+                      )),
+                ),
                 trailing: InkWell(
                   onTap: () {
                     bottomCommentSheet(context);

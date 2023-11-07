@@ -1,13 +1,19 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:echo/screens/recorder_screen.dart';
-import 'package:echo/utils/colors.dart';
+
 import 'package:echo/widgets/custom_button.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UploadPostScreen extends StatelessWidget {
-  UploadPostScreen({super.key});
+  UploadPostScreen({this.audioFile, super.key});
   final TextEditingController postController = TextEditingController();
+  File? audioFile;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +64,9 @@ class UploadPostScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset("assets/images/audio_icon.png"),
+                          audioFile != null
+                              ? Icon(Icons.play_arrow)
+                              : Image.asset("assets/images/audio_icon.png"),
                           Text("Upload Audio")
                         ],
                       ),
@@ -67,7 +75,16 @@ class UploadPostScreen extends StatelessWidget {
               SizedBox(
                 height: 60,
               ),
-              CustomButton(voidCallback: () {}, title: "Save")
+              CustomButton(
+                  voidCallback: () {
+                    if (audioFile != null || postController.text.isNotEmpty) {
+                      //   audioFile!.readAsBytes();
+
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
+                  },
+                  title: "Save")
             ],
           ),
         ),
@@ -79,7 +96,11 @@ class UploadPostScreen extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: CustomButton(voidCallback: () {}, title: "Local Storage"),
+        title: CustomButton(
+            voidCallback: () {
+              audioPickFromLocal();
+            },
+            title: "Local Storage"),
         content: CustomButton(
             voidCallback: () {
               Navigator.push(
@@ -98,5 +119,19 @@ class UploadPostScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void audioPickFromLocal() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    log("$result");
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      audioFile = file;
+
+      print(file);
+    } else {
+      // User canceled the picker
+      log("something went wrong");
+    }
   }
 }

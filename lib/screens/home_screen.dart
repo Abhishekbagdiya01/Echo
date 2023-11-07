@@ -1,4 +1,5 @@
 import 'package:echo/route/page_const.dart';
+import 'package:echo/screens/chat_screens/chat_scree.dart';
 import 'package:echo/utils/global_variables.dart';
 import 'package:echo/widgets/post_card.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,13 @@ class HomeScreen extends StatelessWidget {
                 }),
             IconButton(
                 icon: Image.asset("assets/images/chat_icon.png"),
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ));
+                }),
           ],
         ),
         body: SafeArea(
@@ -37,6 +44,7 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return postCard(
                   username: dummyData[index]["name"],
+                  profileUrl: dummyData[index]["profileUrl"],
                   location: dummyData[index]["location"],
                   postType: dummyData[index]["postType"],
                   content: dummyData[index]["content"]);

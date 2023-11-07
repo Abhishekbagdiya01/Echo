@@ -1,6 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:echo/screens/upload_post_screen.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:record/record.dart';
@@ -91,7 +95,23 @@ class _RecorderScreenState extends State<RecorderScreen> {
               height: 10,
             ),
             ElevatedButton(
-                onPressed: playRecording, child: Text("Play recording"))
+                onPressed: playRecording, child: Text("Play recording")),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  log(audioPath);
+                  if (audioPath != "") {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              UploadPostScreen(audioFile: File(audioPath)),
+                        ));
+                  }
+                },
+                child: Text("Save"))
           ],
         ),
       ),
