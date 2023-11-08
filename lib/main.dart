@@ -1,11 +1,16 @@
+import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/route/on_generated_routes.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
-// import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(
+      create: (context) => CredentialCubitBloc(),
+    )
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

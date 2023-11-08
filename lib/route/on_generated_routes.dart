@@ -1,5 +1,6 @@
 import 'package:echo/responsive/responsive_layout.dart';
 import 'package:echo/route/page_const.dart';
+import 'package:echo/screens/home_screen.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
 import 'package:echo/screens/user_onboarding/forgot_password_screen.dart';
 import 'package:echo/screens/user_onboarding/login_screen.dart';
@@ -28,6 +29,12 @@ class OnGeneratedRoutes {
         {
           return MaterialPageRoute(
             builder: (_) => ForgotPasswordScreen(),
+          );
+        }
+      case PageConst.HomeScreen:
+        {
+          return MaterialPageRoute(
+            builder: (_) => HomeScreen(),
           );
         }
       case PageConst.UploadPostScreen:

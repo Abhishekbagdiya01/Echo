@@ -14,7 +14,7 @@ class AuthRepository {
   http.Client client = http.Client();
 
   String _endPoint(String endPoint) {
-    return "http://localhost:5000/api/${endPoint}";
+    return "http://192.168.123.6:5000/api/$endPoint";
   }
 
   Map<String, String> _header = {
@@ -23,11 +23,13 @@ class AuthRepository {
 
   Future signUp(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
-    final response = await client.post(Uri.parse("signUp"),
+
+    final response = await client.post(Uri.parse(_endPoint("signUp")),
         body: encodedParam, headers: _header);
 
     if (response.statusCode == 200) {
       final user = UserModel.fromJson(jsonDecode(response.body)["message"]);
+
       return user;
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
@@ -36,11 +38,14 @@ class AuthRepository {
 
   Future logIn(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
-    final response = await client.post(Uri.parse("login"),
-        body: encodedParam, headers: _header);
+    final url = _endPoint("login");
+
+    final response =
+        await client.post(Uri.parse(url), body: encodedParam, headers: _header);
 
     if (response.statusCode == 200) {
-      final user = UserModel.fromJson(jsonDecode(response.body)["message"]);
+      final user = UserModel.fromJson(jsonDecode(response.body)['user']);
+
       return user;
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
@@ -49,7 +54,7 @@ class AuthRepository {
 
   Future forgotPassword(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
-    final response = await client.post(Uri.parse("login"),
+    final response = await client.post(Uri.parse("forgotPassword"),
         body: encodedParam, headers: _header);
 
     if (response.statusCode == 200) {

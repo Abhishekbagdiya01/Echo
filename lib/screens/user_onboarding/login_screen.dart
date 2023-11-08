@@ -1,3 +1,5 @@
+import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
+import 'package:echo/model/user_model.dart';
 import 'package:echo/route/page_const.dart';
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
@@ -6,11 +8,12 @@ import 'package:echo/utils/colors.dart';
 import 'package:echo/widgets/text_styles.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widgets/custom_button.dart';
 
 class LoginScreen extends StatelessWidget {
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -36,8 +39,8 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: [
                   InputFormField(
-                    controller: usernameController,
-                    hintText: "Username",
+                    controller: emailController,
+                    hintText: "E-mail",
                   ),
                   SizedBox(
                     height: 50,
@@ -63,12 +66,25 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  CustomButton(
-                    title: "Login",
-                    voidCallback: () {
-                      Navigator.pushReplacementNamed(
-                          context, PageConst.ResponsiveLayout);
+                  BlocListener<CredentialCubitBloc, CredentialCubitState>(
+                    listener:
+                        (BuildContext context, CredentialCubitState state) {
+                      if (state is CredentialSuccessState) {
+                        Navigator.pushReplacementNamed(
+                            context, PageConst.ResponsiveLayout);
+                      }
                     },
+                    child: CustomButton(
+                      title: "Login",
+                      voidCallback: () {
+                        UserModel user = UserModel(
+                           
+                            email: emailController.text,
+                            password: passwordController.text);
+                        BlocProvider.of<CredentialCubitBloc>(context)
+                            .add(Login(userModel: user));
+                      },
+                    ),
                   ),
                   Row(
                     children: [

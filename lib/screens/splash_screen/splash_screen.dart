@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:echo/screens/user_onboarding/login_screen.dart';
+import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/logo.dart';
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+            builder: (context) => SignUpScreen(),
           ));
     });
   }
