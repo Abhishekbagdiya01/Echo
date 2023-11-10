@@ -11,45 +11,45 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 5,
-          shadowColor: Colors.black,
-          title: Text(
-            "Hi,Abhishek",
-            style:
-                GoogleFonts.dmSans(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          actions: [
-            IconButton(
-                icon: Image.asset("assets/images/add_post_icon.png"),
-                onPressed: () {
-                  Navigator.pushNamed(context, PageConst.UploadPostScreen);
-                }),
-            IconButton(
-                icon: Image.asset("assets/images/chat_icon.png"),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatScreen(),
-                      ));
-                }),
-          ],
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 5,
+        shadowColor: Colors.black,
+        title: Text(
+          "Hi,Abhishek",
+          style: GoogleFonts.dmSans(fontSize: 24, fontWeight: FontWeight.bold),
         ),
-        body: SafeArea(
-          child: ListView.builder(
-            padding: EdgeInsets.all(10),
-            itemCount: dummyData.length,
-            itemBuilder: (context, index) {
-              return postCard(
-                  username: dummyData[index]["name"],
-                  profileUrl: dummyData[index]["profileUrl"],
-                  location: dummyData[index]["location"],
-                  postType: dummyData[index]["postType"],
-                  content: dummyData[index]["content"]);
-            },
-          ),
-        ));
+        actions: [
+          IconButton(
+              icon: Image.asset("assets/images/add_post_icon.png"),
+              onPressed: () {
+                Navigator.pushNamed(context, PageConst.UploadPostScreen);
+              }),
+          IconButton(
+              icon: Image.asset("assets/images/chat_icon.png"),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatScreen(),
+                    ));
+              }),
+        ],
+      ),
+      body: SafeArea(
+        child: ListView.builder(
+          padding: EdgeInsets.all(10),
+          itemCount: dummyData.length,
+          itemBuilder: (context, index) {
+            return postCard(
+                username: dummyData[index]["name"],
+                profileUrl: dummyData[index]["profileUrl"],
+                location: dummyData[index]["location"],
+                postType: dummyData[index]["postType"],
+                content: dummyData[index]["content"]);
+          },
+        ),
+      ),
+    );
   }
 }

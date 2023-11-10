@@ -1,7 +1,10 @@
-import 'dart:async';
+import 'dart:developer';
 
-import 'package:echo/screens/user_onboarding/signup_screen.dart';
+import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
+import 'package:echo/route/page_const.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widgets/logo.dart';
 
@@ -17,19 +20,35 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(Duration(milliseconds: 3000), () {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SignUpScreen(),
-          ));
-    });
+
+    BlocProvider.of<AuthBloc>(context).add(AppStart());
+    // Timer(Duration(milliseconds: 3000), () {
+    //   Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(
+    //         builder: (context) => SignUpScreen(),
+    //       ));
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: EchoLogo(),
+      body: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthSuccessState) {
+              if (state.uid == "") {
+                log("$state");
+                Navigator.pushReplacementNamed(context, PageConst.LoginScreen);
+              } else {
+                Navigator.pushReplacementNamed(
+                    context, PageConst.ResponsiveLayout);
+              }
+            } else {
+              Navigator.pushReplacementNamed(context, PageConst.LoginScreen);
+            }
+          },
+          child: EchoLogo()),
     );
   }
 }

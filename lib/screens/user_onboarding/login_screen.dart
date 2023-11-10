@@ -1,3 +1,4 @@
+import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
 import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/model/user_model.dart';
 import 'package:echo/route/page_const.dart';
@@ -70,6 +71,8 @@ class LoginScreen extends StatelessWidget {
                     listener:
                         (BuildContext context, CredentialCubitState state) {
                       if (state is CredentialSuccessState) {
+                        BlocProvider.of<AuthBloc>(context)
+                            .add(LoggedIn(uid: state.user.uid!));
                         Navigator.pushReplacementNamed(
                             context, PageConst.ResponsiveLayout);
                       }
@@ -78,7 +81,6 @@ class LoginScreen extends StatelessWidget {
                       title: "Login",
                       voidCallback: () {
                         UserModel user = UserModel(
-                           
                             email: emailController.text,
                             password: passwordController.text);
                         BlocProvider.of<CredentialCubitBloc>(context)

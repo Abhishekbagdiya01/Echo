@@ -21,7 +21,7 @@ class AuthRepository {
     "Content-Type": "application/json; charset=utf-8"
   };
 
-  Future signUp(UserModel userModel) async {
+  Future<UserModel> signUp(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
 
     final response = await client.post(Uri.parse(_endPoint("signUp")),
@@ -36,7 +36,7 @@ class AuthRepository {
     }
   }
 
-  Future logIn(UserModel userModel) async {
+  Future<UserModel> logIn(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
     final url = _endPoint("login");
 

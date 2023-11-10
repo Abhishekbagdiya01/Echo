@@ -13,22 +13,22 @@ class CredentialCubitBloc
   CredentialCubitBloc() : super(CredentialLoadingState()) {
     AuthRepository authRepository = AuthRepository();
 
-    // on<SignUp>((event, emit) async {
-    //   try {
-    //     emit(CredentialLoadingState());
+    on<SignUp>((event, emit) async {
+      try {
+        emit(CredentialLoadingState());
 
-    //     await authRepository.signUp(event.userModel);
-    //     emit(CredentialSuccessState());
-    //   } on ServerException catch (e) {
-    //     emit(CredentialErrorState(errorMessage: e.errorMessage));
-    //   }
-    // });
+        UserModel user = await authRepository.signUp(event.userModel);
+        emit(CredentialSuccessState(user: user));
+      } on ServerException catch (e) {
+        emit(CredentialErrorState(errorMessage: e.errorMessage));
+      }
+    });
 
     on<Login>((event, emit) async {
       try {
         emit(CredentialLoadingState());
-        await authRepository.logIn(event.userModel);
-        emit(CredentialSuccessState());
+        UserModel user = await authRepository.logIn(event.userModel);
+        emit(CredentialSuccessState(user: user));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }

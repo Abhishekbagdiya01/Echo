@@ -1,43 +1,48 @@
 class UserModel {
-  final String? firstName;
-  final String? lastName;
-  final String? ageGroup;
-  final String? gender;
-  final String? username;
-  final String? email;
-  final String? password;
+  String? uid;
+  String? firstName;
+  String? lastName;
+  String? ageGroup;
+  String? gender;
+  String? username;
+  String? email;
+  String? password;
+  int? iV;
 
-  UserModel({
-    this.firstName,
-    this.lastName,
-    this.ageGroup,
-    this.gender,
-    this.username,
-    this.email,
-    this.password,
-  });
+  UserModel(
+      {this.uid,
+      this.firstName,
+      this.lastName,
+      this.ageGroup,
+      this.gender,
+      this.username,
+      this.email,
+      this.password,
+      this.iV});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      ageGroup: json['ageGroup'],
-      gender: json['gender'],
-      username: json['username'],
-      email: json['email'],
-      password: json['password'],
-    );
+  UserModel.fromJson(Map<String, dynamic> json) {
+    uid = json['_id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    ageGroup = json['ageGroup'];
+    gender = json['gender'];
+    username = json['username'];
+    email = json['email'];
+    password = json['password'];
+    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'ageGroup': ageGroup,
-      'gender': gender,
-      'username': username,
-      'email': email,
-      'password': password,
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.uid;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['ageGroup'] = this.ageGroup;
+    data['gender'] = this.gender;
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['__v'] = this.iV;
+    return data;
   }
 }

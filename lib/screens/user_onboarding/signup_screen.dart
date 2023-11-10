@@ -1,3 +1,4 @@
+import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
 import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/model/user_model.dart';
 import 'package:echo/route/page_const.dart';
@@ -122,6 +123,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (state is CredentialLoadingState) {
                         Center(child: CircularProgressIndicator());
                       } else if (state is CredentialSuccessState) {
+                        BlocProvider.of<AuthBloc>(context)
+                            .add(LoggedIn(uid: state.user.uid!));
                         Navigator.pushReplacementNamed(
                             context, PageConst.HomeScreen);
                       } else if (state is CredentialErrorState) {

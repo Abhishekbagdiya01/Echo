@@ -1,3 +1,4 @@
+import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
 import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/route/on_generated_routes.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
@@ -9,6 +10,9 @@ void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
       create: (context) => CredentialCubitBloc(),
+    ),
+    BlocProvider(
+      create: (context) => AuthBloc(),
     )
   ], child: MyApp()));
 }
