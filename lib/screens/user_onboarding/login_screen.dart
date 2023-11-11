@@ -6,6 +6,7 @@ import 'package:echo/screens/user_onboarding/signup_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
 import 'package:echo/utils/colors.dart';
+import 'package:echo/widgets/snackbar.dart';
 import 'package:echo/widgets/text_styles.dart';
 
 import 'package:flutter/material.dart';
@@ -75,6 +76,8 @@ class LoginScreen extends StatelessWidget {
                             .add(LoggedIn(uid: state.user.uid!));
                         Navigator.pushReplacementNamed(
                             context, PageConst.ResponsiveLayout);
+                      } else if (state is CredentialErrorState) {
+                        snackbarMessenger(context, state.errorMessage);
                       }
                     },
                     child: CustomButton(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
 import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/model/user_model.dart';
@@ -8,6 +10,7 @@ import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
 import 'package:echo/widgets/custom_button.dart';
 import 'package:echo/widgets/snackbar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,8 +36,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordController = TextEditingController();
 
   TextEditingController confirmPassController = TextEditingController();
-  int selectedERadio = 0;
-
+  String selectedERadio = "";
+  String dropDownValue = "Age";
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -77,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           title: Text("Male",
                               style: interTextStyle(
                                   color: blackColor.withOpacity(.7))),
-                          value: 1,
+                          value: "Male",
                           groupValue: selectedERadio,
                           onChanged: (value) {
                             setState(() {
@@ -94,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: interTextStyle(
                                 color: blackColor.withOpacity(.7)),
                           ),
-                          value: 2,
+                          value: "Female",
                           groupValue: selectedERadio,
                           onChanged: (value) {
                             setState(() {
@@ -104,6 +107,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  DropdownButton(
+                    hint: Text(dropDownValue),
+                    items: [
+                      DropdownMenuItem(
+                          child: Text('13 - 17'), value: "13 - 17"),
+                      DropdownMenuItem(
+                          child: Text('18 - 64'), value: "18 - 64"),
+                      DropdownMenuItem(child: Text('65+'), value: "65+"),
+                    ],
+                    onChanged: (value) {
+                      dropDownValue = value!;
+                      setState(() {});
+                    },
                   ),
                   InputFormField(
                     controller: passwordController,
@@ -128,23 +145,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.pushReplacementNamed(
                             context, PageConst.HomeScreen);
                       } else if (state is CredentialErrorState) {
-                        Center(
-                          child: Text(state.errorMessage),
-                        );
+                        snackbarMessenger(context, state.errorMessage);
                       }
                     },
                     child: CustomButton(
                         voidCallback: () {
-                          UserModel user = UserModel(
-                              firstName: firstNController.text,
-                              lastName: lastNController.text,
-                              ageGroup: "18",
-                              gender: selectedERadio.toString(),
-                              username: usernameController.text,
-                              email: emailController.text,
-                              password: passwordController.text);
-                          BlocProvider.of<CredentialCubitBloc>(context)
-                              .add(SignUp(userModel: user));
+                          if (passwordController.text ==
+                                  confirmPassController.text &&
+                              firstNController.text.isNotEmpty &&
+                              lastNController.text.isNotEmpty &&
+                              dropDownValue != "Age" &&
+                              selectedERadio.isNotEmpty) {
+                            UserModel user = UserModel(
+                                firstName: firstNController.text,
+                                lastName: lastNController.text,
+                                ageGroup: dropDownValue,
+                                gender: selectedERadio.toString(),
+                                username: usernameController.text,
+                                email: emailController.text,
+                                password: passwordController.text);
+                            BlocProvider.of<CredentialCubitBloc>(context)
+                                .add(SignUp(userModel: user));
+
+                            log("${user.uid} || ${user.firstName} || ${user.lastName} || ${user.gender} || ${user.ageGroup} ||  ${user.email} || ${user.password}  ");
+                          } else {
+                            snackbarMessenger(
+                                context, "Please fill all the fields");
+                          }
                         },
                         title: "SignUp"),
                   ),

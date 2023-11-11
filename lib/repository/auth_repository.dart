@@ -14,7 +14,7 @@ class AuthRepository {
   http.Client client = http.Client();
 
   String _endPoint(String endPoint) {
-    return "http://192.168.123.6:5000/api/$endPoint";
+    return "http://192.168.29.50:5000/api/$endPoint";
   }
 
   Map<String, String> _header = {
@@ -28,7 +28,7 @@ class AuthRepository {
         body: encodedParam, headers: _header);
 
     if (response.statusCode == 200) {
-      final user = UserModel.fromJson(jsonDecode(response.body)["message"]);
+      final user = UserModel.fromJson(jsonDecode(response.body)['user']);
 
       return user;
     } else {
