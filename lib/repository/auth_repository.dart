@@ -53,7 +53,7 @@ class AuthRepository {
     }
   }
 
-  Future forgotPassword(String email) async {
+  Future<String> forgotPassword(String email) async {
     final encodedParam = jsonEncode({"email": email});
     final response = await client.post(Uri.parse(_endPoint("forgotPassword")),
         body: encodedParam, headers: _header);
@@ -66,5 +66,29 @@ class AuthRepository {
     }
   }
 
-  Future<void> verifyOtp(String otp) async {}
+  Future<String> verifyOtp(String email, String otp) async {
+    final encodedParam = jsonEncode({"email": email, "otp": otp});
+    final response = await client.post(Uri.parse(_endPoint("verifyOTP")),
+        body: encodedParam, headers: _header);
+
+    if (response.statusCode == 200) {
+      log(jsonDecode(response.body)["message"]);
+      return jsonDecode(response.body)["message"];
+    } else {
+      throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
+    }
+  }
+
+  Future<String> resetPassword(String email, String password) async {
+    final encodedParam = jsonEncode({"email": email, "newPassword": password});
+    final response = await client.post(Uri.parse(_endPoint("resetPassword")),
+        body: encodedParam, headers: _header);
+
+    if (response.statusCode == 200) {
+      log(jsonDecode(response.body)["message"]);
+      return jsonDecode(response.body)["message"];
+    } else {
+      throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
+    }
+  }
 }

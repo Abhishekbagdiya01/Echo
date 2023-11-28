@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/screens/user_onboarding/set_new_password_screen.dart';
 
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
@@ -10,8 +11,10 @@ import 'package:echo/widgets/text_styles.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widgets/custom_button.dart';
+import '../../widgets/snackbar.dart';
 
 class OtpCodeScreen extends StatelessWidget {
   OtpCodeScreen({required this.userEmail});
@@ -61,7 +64,7 @@ class OtpCodeScreen extends StatelessWidget {
                     children: [
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 60,
                         child: TextField(
                           textAlign: TextAlign.center,
                           onChanged: (value) {
@@ -78,7 +81,7 @@ class OtpCodeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 60,
                         child: TextField(
                           textAlign: TextAlign.center,
                           onChanged: (value) {
@@ -95,7 +98,7 @@ class OtpCodeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 60,
                         child: TextField(
                           textAlign: TextAlign.center,
                           onChanged: (value) {
@@ -112,7 +115,7 @@ class OtpCodeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 60,
                         child: TextField(
                           textAlign: TextAlign.center,
                           onChanged: (value) {
@@ -129,7 +132,24 @@ class OtpCodeScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 68,
-                        width: 64,
+                        width: 60,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              otp = otp + value;
+                              log(otp);
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 68,
+                        width: 60,
                         child: TextField(
                           textAlign: TextAlign.center,
                           onChanged: (value) {
@@ -168,15 +188,30 @@ class OtpCodeScreen extends StatelessWidget {
                     ],
                   ),
                   Center(
-                    child: CustomButton(
-                      title: "Next",
-                      voidCallback: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SetNewPasswordScreen(),
-                            ));
+                    child:
+                        BlocListener<CredentialCubitBloc, CredentialCubitState>(
+                      listener: (context, state) {
+                        log(state.toString());
+                        if (state is CredentialSuccessMessageState) {
+                          snackbarMessenger(context, state.successMessage);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SetNewPasswordScreen(),
+                              ));
+                        } else if (state is CredentialErrorState) {
+                          snackbarMessenger(context, state.errorMessage);
+                        }
                       },
+                      child: CustomButton(
+                        title: "Next",
+                        voidCallback: () {
+                          log(otp);
+
+                          BlocProvider.of<CredentialCubitBloc>(context)
+                              .add(OTPVerification(email: userEmail, otp: otp));
+                        },
+                      ),
                     ),
                   ),
                 ],

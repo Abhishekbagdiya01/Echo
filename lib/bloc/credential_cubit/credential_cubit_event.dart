@@ -35,3 +35,25 @@ class ForgotPassword extends CredentialCubitEvent {
   @override
   List<Object> get props => [email];
 }
+
+class OTPVerification extends CredentialCubitEvent {
+  String email;
+  String otp;
+  OTPVerification({
+    required this.email,
+    required this.otp,
+  });
+  @override
+  List<Object> get props => [email, otp];
+}
+
+class ResetPassword extends CredentialCubitEvent {
+  String email;
+  String otp;
+  ResetPassword({
+    required this.email,
+    required this.otp,
+  });
+  @override
+  List<Object> get props => [email, otp];
+}

@@ -39,5 +39,14 @@ class CredentialCubitBloc
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }
     });
+
+    on<OTPVerification>((event, emit) async {
+      try {
+        String message = await authRepository.verifyOtp(event.email, event.otp);
+        emit(CredentialSuccessMessageState(successMessage: message));
+      } on ServerException catch (e) {
+        emit(CredentialErrorState(errorMessage: e.errorMessage));
+      }
+    });
   }
 }
