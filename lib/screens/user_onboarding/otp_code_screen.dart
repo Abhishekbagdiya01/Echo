@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:echo/screens/user_onboarding/set_new_password_screen.dart';
 
 import 'package:echo/screens/user_onboarding/signup_screen.dart';
@@ -7,14 +9,14 @@ import 'package:echo/utils/colors.dart';
 import 'package:echo/widgets/text_styles.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../widgets/custom_button.dart';
 
 class OtpCodeScreen extends StatelessWidget {
   OtpCodeScreen({required this.userEmail});
   final String userEmail;
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  String otp = "";
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
@@ -53,6 +55,96 @@ class OtpCodeScreen extends StatelessWidget {
                   SizedBox(
                     height: 50,
                   ),
+                  Form(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 68,
+                        width: 64,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              otp = otp + value;
+                              log(otp);
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 68,
+                        width: 64,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              otp = otp + value;
+                              log(otp);
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 68,
+                        width: 64,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              otp = otp + value;
+                              log(otp);
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 68,
+                        width: 64,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              otp = otp + value;
+                              log(otp);
+                              FocusScope.of(context).nextFocus();
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 68,
+                        width: 64,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            if (value.length == 1) {
+                              otp = otp + value;
+                              log(otp);
+                            }
+                          },
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(1)
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
                   Row(
                     children: [
                       Text(

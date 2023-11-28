@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:echo/model/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ class AuthRepository {
   http.Client client = http.Client();
 
   String _endPoint(String endPoint) {
-    return "http://192.168.29.50:5000/api/$endPoint";
+    return "http://192.168.123.6:5000/api/$endPoint";
   }
 
   Map<String, String> _header = {
@@ -52,16 +53,18 @@ class AuthRepository {
     }
   }
 
-  Future forgotPassword(UserModel userModel) async {
-    final encodedParam = jsonEncode(userModel);
-    final response = await client.post(Uri.parse("forgotPassword"),
+  Future forgotPassword(String email) async {
+    final encodedParam = jsonEncode({"email": email});
+    final response = await client.post(Uri.parse(_endPoint("forgotPassword")),
         body: encodedParam, headers: _header);
 
     if (response.statusCode == 200) {
-      final user = UserModel.fromJson(jsonDecode(response.body)["message"]);
-      return user;
+      log(jsonDecode(response.body)["message"]);
+      return jsonDecode(response.body)["message"];
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
     }
   }
+
+  Future<void> verifyOtp(String otp) async {}
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:echo/model/user_model.dart';
 import 'package:echo/repository/auth_repository.dart';
@@ -29,6 +27,14 @@ class CredentialCubitBloc
         emit(CredentialLoadingState());
         UserModel user = await authRepository.logIn(event.userModel);
         emit(CredentialSuccessState(user: user));
+      } on ServerException catch (e) {
+        emit(CredentialErrorState(errorMessage: e.errorMessage));
+      }
+    });
+    on<ForgotPassword>((event, emit) async {
+      try {
+        String message = await authRepository.forgotPassword(event.email);
+        emit(CredentialSuccessMessageState(successMessage: message));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }

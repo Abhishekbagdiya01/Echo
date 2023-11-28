@@ -1,9 +1,11 @@
+import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/screens/user_onboarding/otp_code_screen.dart';
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
 import 'package:echo/widgets/snackbar.dart';
 import 'package:echo/widgets/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widgets/custom_button.dart';
 
@@ -44,20 +46,31 @@ class ForgotPasswordScreen extends StatelessWidget {
             SizedBox(
               height: 50,
             ),
-            CustomButton(
-              title: "Send",
-              voidCallback: () {
-                if (emailController.text.isNotEmpty) {
+            BlocListener<CredentialCubitBloc, CredentialCubitState>(
+              listener: (context, state) {
+                if (state is CredentialSuccessMessageState) {
+                  snackbarMessenger(context, state.successMessage);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
                             OtpCodeScreen(userEmail: emailController.text),
                       ));
-                } else {
-                  snackbarMessenger(context, "Please fill the email field");
+                } else if (state is CredentialErrorState) {
+                  snackbarMessenger(context, state.errorMessage);
                 }
               },
+              child: CustomButton(
+                title: "Send",
+                voidCallback: () {
+                  if (emailController.text.isNotEmpty) {
+                    BlocProvider.of<CredentialCubitBloc>(context)
+                        .add(ForgotPassword(email: emailController.text));
+                  } else {
+                    snackbarMessenger(context, "Please fill the email field");
+                  }
+                },
+              ),
             ),
             SizedBox(
                 height: MediaQuery.sizeOf(context).height * 0.50,

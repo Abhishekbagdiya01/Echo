@@ -16,6 +16,13 @@ class CredentialSuccessState extends CredentialCubitState {
   });
 }
 
+class CredentialSuccessMessageState extends CredentialCubitState {
+  final String successMessage;
+  CredentialSuccessMessageState({
+    required this.successMessage,
+  });
+}
+
 class CredentialErrorState extends CredentialCubitState {
   final String errorMessage;
   CredentialErrorState({

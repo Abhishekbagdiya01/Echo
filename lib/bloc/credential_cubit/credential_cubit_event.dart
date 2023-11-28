@@ -26,3 +26,12 @@ class Login extends CredentialCubitEvent {
   // TODO: implement props
   List<Object> get props => [userModel];
 }
+
+class ForgotPassword extends CredentialCubitEvent {
+  String email;
+  ForgotPassword({
+    required this.email,
+  });
+  @override
+  List<Object> get props => [email];
+}
