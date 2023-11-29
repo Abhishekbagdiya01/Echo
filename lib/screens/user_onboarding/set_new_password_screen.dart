@@ -1,16 +1,20 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+
 import 'package:echo/screens/user_onboarding/widgets/custom_shape.dart';
 import 'package:echo/screens/user_onboarding/widgets/form_field.dart';
-
 import 'package:echo/widgets/snackbar.dart';
 import 'package:echo/widgets/text_styles.dart';
-
-import 'package:flutter/material.dart';
 
 import '../../widgets/custom_button.dart';
 
 class SetNewPasswordScreen extends StatelessWidget {
+  final String userEmail;
+  SetNewPasswordScreen({
+    Key? key,
+    required this.userEmail,
+  }) : super(key: key);
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();

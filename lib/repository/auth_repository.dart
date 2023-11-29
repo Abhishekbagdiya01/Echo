@@ -79,8 +79,9 @@ class AuthRepository {
     }
   }
 
-  Future<String> resetPassword(String email, String password) async {
-    final encodedParam = jsonEncode({"email": email, "newPassword": password});
+  Future<String> resetPassword(String email, String newPassword) async {
+    final encodedParam =
+        jsonEncode({"email": email, "newPassword": newPassword});
     final response = await client.post(Uri.parse(_endPoint("resetPassword")),
         body: encodedParam, headers: _header);
 

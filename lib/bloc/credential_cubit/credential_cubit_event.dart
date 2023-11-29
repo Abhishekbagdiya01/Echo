@@ -49,11 +49,11 @@ class OTPVerification extends CredentialCubitEvent {
 
 class ResetPassword extends CredentialCubitEvent {
   String email;
-  String otp;
+  String newPassword;
   ResetPassword({
     required this.email,
-    required this.otp,
+    required this.newPassword,
   });
   @override
-  List<Object> get props => [email, otp];
+  List<Object> get props => [email, newPassword];
 }

@@ -19,7 +19,10 @@ import '../../widgets/snackbar.dart';
 class OtpCodeScreen extends StatelessWidget {
   OtpCodeScreen({required this.userEmail});
   final String userEmail;
-  String otp = "";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<TextEditingController> controllers =
+      List.generate(6, (_) => TextEditingController());
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
@@ -59,112 +62,42 @@ class OtpCodeScreen extends StatelessWidget {
                     height: 50,
                   ),
                   Form(
+                      key: _formKey,
                       child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 68,
-                        width: 60,
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if (value.length == 1) {
-                              otp = otp + value;
-                              log(otp);
-                              FocusScope.of(context).nextFocus();
-                            }
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68,
-                        width: 60,
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if (value.length == 1) {
-                              otp = otp + value;
-                              log(otp);
-                              FocusScope.of(context).nextFocus();
-                            }
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68,
-                        width: 60,
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if (value.length == 1) {
-                              otp = otp + value;
-                              log(otp);
-                              FocusScope.of(context).nextFocus();
-                            }
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68,
-                        width: 60,
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if (value.length == 1) {
-                              otp = otp + value;
-                              log(otp);
-                              FocusScope.of(context).nextFocus();
-                            }
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68,
-                        width: 60,
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if (value.length == 1) {
-                              otp = otp + value;
-                              log(otp);
-                              FocusScope.of(context).nextFocus();
-                            }
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 68,
-                        width: 60,
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if (value.length == 1) {
-                              otp = otp + value;
-                              log(otp);
-                            }
-                          },
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int i = 0; i < 6; i++)
+                            SizedBox(
+                              height: 68,
+                              width: 60,
+                              child: TextFormField(
+                                controller: controllers[i],
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                ),
+                                onChanged: (value) {
+                                  if (value.length == 1) {
+                                    FocusScope.of(context).nextFocus();
+                                  }
+                                },
+                                onSaved: (value) {
+                                  if (value != null && value.isNotEmpty) {
+                                    controllers[i].text = value;
+                                  } else {
+                                    if (i > 0) {
+                                      controllers[i - 1].text = '';
+                                    }
+                                  }
+                                },
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(1)
+                                ],
+                              ),
+                            ),
+                        ],
+                      )),
                   Row(
                     children: [
                       Text(
@@ -197,7 +130,8 @@ class OtpCodeScreen extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SetNewPasswordScreen(),
+                                builder: (context) =>
+                                    SetNewPasswordScreen(userEmail: userEmail),
                               ));
                         } else if (state is CredentialErrorState) {
                           snackbarMessenger(context, state.errorMessage);
@@ -206,10 +140,15 @@ class OtpCodeScreen extends StatelessWidget {
                       child: CustomButton(
                         title: "Next",
                         voidCallback: () {
-                          log(otp);
-
-                          BlocProvider.of<CredentialCubitBloc>(context)
-                              .add(OTPVerification(email: userEmail, otp: otp));
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            String enteredOTP = controllers.fold('',
+                                (prev, controller) => prev + controller.text);
+                            log(enteredOTP);
+                            BlocProvider.of<CredentialCubitBloc>(context).add(
+                                OTPVerification(
+                                    email: userEmail, otp: enteredOTP));
+                          }
                         },
                       ),
                     ),

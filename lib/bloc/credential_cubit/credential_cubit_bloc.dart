@@ -48,5 +48,15 @@ class CredentialCubitBloc
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }
     });
+
+    on<ResetPassword>((event, emit) async {
+      try {
+        String message =
+            await authRepository.resetPassword(event.email, event.newPassword);
+        emit(CredentialSuccessMessageState(successMessage: message));
+      } on ServerException catch (e) {
+        emit(CredentialErrorState(errorMessage: e.errorMessage));
+      }
+    });
   }
 }
