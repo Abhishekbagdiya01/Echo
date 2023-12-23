@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Center(child: CircularProgressIndicator());
                       } else if (state is CredentialSuccessState) {
                         BlocProvider.of<AuthBloc>(context)
-                            .add(LoggedIn(uid: state.user!.uid!));
+                            .add(LoggedIn(uid: state.userId));
                         Navigator.pushReplacementNamed(
                             context, PageConst.HomeScreen);
                       } else if (state is CredentialErrorState) {

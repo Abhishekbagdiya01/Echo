@@ -2,52 +2,44 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:echo/model/user_model.dart';
+import 'package:echo/repository/server_exception.dart';
+import 'package:echo/utils/shared_pref.dart';
+import 'package:echo/utils/utils.dart';
 import 'package:http/http.dart' as http;
-
-class ServerException implements Exception {
-  String errorMessage;
-  ServerException({
-    required this.errorMessage,
-  });
-}
 
 class AuthRepository {
   http.Client client = http.Client();
 
-  String _endPoint(String endPoint) {
-    return "http://192.168.123.6:5000/api/$endPoint";
-  }
-
-  Map<String, String> _header = {
-    "Content-Type": "application/json; charset=utf-8"
-  };
-
-  Future<UserModel> signUp(UserModel userModel) async {
+  Future<String> signUp(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
 
-    final response = await client.post(Uri.parse(_endPoint("signUp")),
-        body: encodedParam, headers: _header);
+    final response = await client.post(Uri.parse(endPoint("signUp")),
+        body: encodedParam, headers: header);
 
     if (response.statusCode == 200) {
-      final user = UserModel.fromJson(jsonDecode(response.body)['user']);
+      final userId = jsonDecode(response.body)['id'];
 
-      return user;
+      return userId;
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
     }
   }
 
-  Future<UserModel> logIn(UserModel userModel) async {
+  Future<String> logIn(UserModel userModel) async {
     final encodedParam = jsonEncode(userModel);
-    final url = _endPoint("login");
+    final url = endPoint("login");
 
     final response =
-        await client.post(Uri.parse(url), body: encodedParam, headers: _header);
+        await client.post(Uri.parse(url), body: encodedParam, headers: header);
 
     if (response.statusCode == 200) {
-      final user = UserModel.fromJson(jsonDecode(response.body)['user']);
+      String id = await jsonDecode(response.body)['id'];
+      log("UserId : $id");
+      String refreshToken = await jsonDecode(response.body)['refreshToken'];
+      SharedPref().setRefreshToken(refreshToken);
+      log("RefreshToken : $refreshToken");
 
-      return user;
+      return id;
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
     }
@@ -55,8 +47,8 @@ class AuthRepository {
 
   Future<String> forgotPassword(String email) async {
     final encodedParam = jsonEncode({"email": email});
-    final response = await client.post(Uri.parse(_endPoint("forgotPassword")),
-        body: encodedParam, headers: _header);
+    final response = await client.post(Uri.parse(endPoint("forgotPassword")),
+        body: encodedParam, headers: header);
 
     if (response.statusCode == 200) {
       log(jsonDecode(response.body)["message"]);
@@ -66,14 +58,15 @@ class AuthRepository {
     }
   }
 
-  Future<String> verifyOtp(String email, String otp) async {
+  Future verifyOtp(String email, String otp) async {
     final encodedParam = jsonEncode({"email": email, "otp": otp});
-    final response = await client.post(Uri.parse(_endPoint("verifyOTP")),
-        body: encodedParam, headers: _header);
+    final response = await client.post(Uri.parse(endPoint("verifyOTP")),
+        body: encodedParam, headers: header);
 
     if (response.statusCode == 200) {
-      log(jsonDecode(response.body)["message"]);
-      return jsonDecode(response.body)["message"];
+      // log(jsonDecode(response.body)["message"]);
+      String msg = await jsonDecode(response.body)["message"];
+      return msg;
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
     }
@@ -82,12 +75,13 @@ class AuthRepository {
   Future<String> resetPassword(String email, String newPassword) async {
     final encodedParam =
         jsonEncode({"email": email, "newPassword": newPassword});
-    final response = await client.post(Uri.parse(_endPoint("resetPassword")),
-        body: encodedParam, headers: _header);
+    final response = await client.post(Uri.parse(endPoint("resetPassword")),
+        body: encodedParam, headers: header);
 
     if (response.statusCode == 200) {
-      log(jsonDecode(response.body)["message"]);
-      return jsonDecode(response.body)["message"];
+      String message = jsonDecode(response.body)["message"];
+      log(message);
+      return message;
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
     }

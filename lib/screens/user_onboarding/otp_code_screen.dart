@@ -125,7 +125,12 @@ class OtpCodeScreen extends StatelessWidget {
                         BlocListener<CredentialCubitBloc, CredentialCubitState>(
                       listener: (context, state) {
                         log(state.toString());
-                        if (state is CredentialSuccessMessageState) {
+                        if (state is CredentialLoadingState) {
+                          Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state is CredentialSuccessMessageState) {
+                          log(state.toString());
                           snackbarMessenger(context, state.successMessage);
                           Navigator.push(
                               context,

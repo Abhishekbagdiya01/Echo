@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:echo/model/user_model.dart';
 import 'package:echo/repository/auth_repository.dart';
+import 'package:echo/repository/server_exception.dart';
 import 'package:equatable/equatable.dart';
 
 part 'credential_cubit_event.dart';
@@ -15,8 +18,8 @@ class CredentialCubitBloc
       try {
         emit(CredentialLoadingState());
 
-        UserModel user = await authRepository.signUp(event.userModel);
-        emit(CredentialSuccessState(user: user));
+        String userId = await authRepository.signUp(event.userModel);
+        emit(CredentialSuccessState(userId: userId));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }
@@ -25,8 +28,8 @@ class CredentialCubitBloc
     on<Login>((event, emit) async {
       try {
         emit(CredentialLoadingState());
-        UserModel user = await authRepository.logIn(event.userModel);
-        emit(CredentialSuccessState(user: user));
+        String userId = await authRepository.logIn(event.userModel);
+        emit(CredentialSuccessState(userId: userId));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }
@@ -42,7 +45,9 @@ class CredentialCubitBloc
 
     on<OTPVerification>((event, emit) async {
       try {
+        emit(CredentialLoadingState());
         String message = await authRepository.verifyOtp(event.email, event.otp);
+        log("SuccessMsg : $message");
         emit(CredentialSuccessMessageState(successMessage: message));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));
@@ -51,8 +56,10 @@ class CredentialCubitBloc
 
     on<ResetPassword>((event, emit) async {
       try {
+        emit(CredentialLoadingState());
         String message =
             await authRepository.resetPassword(event.email, event.newPassword);
+        log("SuccessMsg : $message");
         emit(CredentialSuccessMessageState(successMessage: message));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));

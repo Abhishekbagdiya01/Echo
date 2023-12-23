@@ -10,9 +10,9 @@ sealed class CredentialCubitState extends Equatable {
 class CredentialLoadingState extends CredentialCubitState {}
 
 class CredentialSuccessState extends CredentialCubitState {
-  UserModel user;
+  String userId;
   CredentialSuccessState({
-    required this.user,
+    required this.userId,
   });
 }
 

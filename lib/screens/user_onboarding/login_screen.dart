@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                         (BuildContext context, CredentialCubitState state) {
                       if (state is CredentialSuccessState) {
                         BlocProvider.of<AuthBloc>(context)
-                            .add(LoggedIn(uid: state.user!.uid!));
+                            .add(LoggedIn(uid: state.userId));
                         Navigator.pushReplacementNamed(
                             context, PageConst.ResponsiveLayout);
                       } else if (state is CredentialErrorState) {
