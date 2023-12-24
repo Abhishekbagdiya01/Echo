@@ -1,5 +1,6 @@
 import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
 import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
+import 'package:echo/bloc/user_bloc/user_bloc_bloc.dart';
 import 'package:echo/route/on_generated_routes.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
 import 'package:echo/utils/colors.dart';
@@ -13,6 +14,9 @@ void main() {
     ),
     BlocProvider(
       create: (context) => AuthBloc(),
+    ),
+    BlocProvider(
+      create: (context) => UserBloc(),
     )
   ], child: MyApp()));
 }

@@ -6,3 +6,9 @@ sealed class UserBlocEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetUserDataEvent extends UserBlocEvent {
+  String uid;
+  String token;
+  GetUserDataEvent({required this.uid, required this.token});
+}
