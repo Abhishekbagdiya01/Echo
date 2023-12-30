@@ -1,6 +1,8 @@
 import 'package:echo/responsive/responsive_layout.dart';
 import 'package:echo/route/page_const.dart';
 import 'package:echo/screens/home_screen.dart';
+import 'package:echo/screens/profile_screen.dart';
+import 'package:echo/screens/search_screen.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
 import 'package:echo/screens/user_onboarding/forgot_password_screen.dart';
 import 'package:echo/screens/user_onboarding/login_screen.dart';
@@ -41,6 +43,18 @@ class OnGeneratedRoutes {
         {
           return MaterialPageRoute(
             builder: (_) => UploadPostScreen(),
+          );
+        }
+      case PageConst.SearchScreen:
+        {
+          return MaterialPageRoute(
+            builder: (_) => SearchScreen(),
+          );
+        }
+      case PageConst.ProfileScreen:
+        {
+          return MaterialPageRoute(
+            builder: (_) => ProfileScreen(),
           );
         }
       case PageConst.ResponsiveLayout:

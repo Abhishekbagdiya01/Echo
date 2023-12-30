@@ -16,7 +16,20 @@ class UserBlocLoadedState extends UserBlocState {
   UserBlocLoadedState({
     required this.userData,
   });
-  
+}
+
+class UserBlocSearchState extends UserBlocState {
+  List userData;
+  UserBlocSearchState({
+    required this.userData,
+  });
+}
+
+class UserBlocSuccessState extends UserBlocState {
+  String successMessage;
+  UserBlocSuccessState({
+    required this.successMessage,
+  });
 }
 
 class UserBlocErrorState extends UserBlocState {

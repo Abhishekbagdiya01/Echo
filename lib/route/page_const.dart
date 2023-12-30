@@ -5,4 +5,6 @@ class PageConst {
   static const ResponsiveLayout = "ResponsiveLayout";
   static const HomeScreen = "HomeScreen";
   static const UploadPostScreen = "UploadPostScreen";
+  static const SearchScreen = "SearchScreen";
+  static const ProfileScreen = "ProfileScreen";
 }

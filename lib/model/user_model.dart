@@ -7,13 +7,16 @@ class UserModel {
   String? username;
   String? email;
   String? password;
-
+  bool? isFollowing;
+  String? profileImage;
   UserModel(
       {this.uid,
       this.firstName,
       this.lastName,
       this.ageGroup,
       this.gender,
+      this.isFollowing,
+      this.profileImage,
       this.username,
       this.email,
       this.password});
@@ -48,31 +51,33 @@ class UserModel {
 
 class UserDataModel {
   UserDataModel({
-    required this.firstName,
-    required this.lastName,
-    required this.ageGroup,
-    required this.gender,
-    required this.username,
-    required this.email,
-    required this.profileImage,
-    required this.followers,
-    required this.following,
-    required this.otp,
-    required this.notifications,
-    required this.posts,
+    this.firstName,
+    this.lastName,
+    this.ageGroup,
+    this.gender,
+    this.username,
+    this.email,
+    this.profileImage,
+    this.followers,
+    this.following,
+    this.isFollowing,
+    this.otp,
+    this.notifications,
+    this.posts,
   });
-  late final String firstName;
-  late final String lastName;
-  late final String ageGroup;
-  late final String gender;
-  late final String username;
-  late final String email;
-  late final String profileImage;
-  late final List<dynamic> followers;
-  late final List<dynamic> following;
-  late final String otp;
-  late final List<dynamic> notifications;
-  late final Posts posts;
+  late final String? firstName;
+  late final String? lastName;
+  late final String? ageGroup;
+  late final String? gender;
+  late final String? username;
+  late final String? email;
+  late final String? profileImage;
+  late final List<dynamic>? followers;
+  late final List<dynamic>? following;
+  late bool? isFollowing;
+  late final String? otp;
+  late final List<dynamic>? notifications;
+  late final Posts? posts;
 
   UserDataModel.fromJson(Map<String, dynamic> json) {
     firstName = json['firstName'];
@@ -102,7 +107,7 @@ class UserDataModel {
     _data['following'] = following;
     _data['otp'] = otp;
     _data['notifications'] = notifications;
-    _data['posts'] = posts.toJson();
+    _data['posts'] = posts?.toJson();
     return _data;
   }
 }

@@ -12,3 +12,19 @@ class GetUserDataEvent extends UserBlocEvent {
   String token;
   GetUserDataEvent({required this.uid, required this.token});
 }
+
+class SearchUserEvent extends UserBlocEvent {
+  String name;
+  String token;
+  SearchUserEvent({required this.name, required this.token});
+}
+
+class FollowUserEvent extends UserBlocEvent {
+  String currentUserId;
+  String userToFollowId;
+  String token;
+  FollowUserEvent(
+      {required this.currentUserId,
+      required this.userToFollowId,
+      required this.token});
+}

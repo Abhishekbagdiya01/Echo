@@ -21,9 +21,38 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
           emit(UserBlocLoadingState());
 
           UserDataModel userData =
-              await UserRepository().getUserById(event.uid,event.token);
+              await UserRepository().getUserById(event.uid, event.token);
           log(userData.toString());
           emit(UserBlocLoadedState(userData: userData));
+        } on ServerException catch (errorMessage) {
+          emit(UserBlocErrorState(errorMessage: errorMessage.toString()));
+        }
+      },
+    );
+
+    on<SearchUserEvent>(
+      (event, emit) async {
+        try {
+          emit(UserBlocLoadingState());
+          if (event.name != "") {
+            List userList = await UserRepository()
+                .searchUserByName(event.name, event.token);
+            print(userList);
+            emit(UserBlocSearchState(userData: userList));
+          }
+        } on ServerException catch (errorMessage) {
+          emit(UserBlocErrorState(errorMessage: errorMessage.toString()));
+        }
+      },
+    );
+
+    on<FollowUserEvent>(
+      (event, emit) async {
+        try {
+          emit(UserBlocLoadingState());
+          String successMessage = await UserRepository().followUser(
+              event.currentUserId, event.userToFollowId, event.token);
+          emit(UserBlocSuccessState(successMessage: successMessage));
         } on ServerException catch (errorMessage) {
           emit(UserBlocErrorState(errorMessage: errorMessage.toString()));
         }

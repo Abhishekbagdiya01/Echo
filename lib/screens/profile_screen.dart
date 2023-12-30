@@ -4,14 +4,16 @@ import 'package:echo/bloc/user_bloc/user_bloc_bloc.dart';
 import 'package:echo/model/user_model.dart';
 import 'package:echo/utils/colors.dart';
 import 'package:echo/utils/shared_pref.dart';
+import 'package:echo/widgets/custom_button.dart';
 import 'package:echo/widgets/post_card.dart';
 import 'package:echo/widgets/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({this.uid, super.key});
 
+  String? uid;
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -21,14 +23,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     getUserById();
+    currUserUid();
   }
 
+  late String currentUserId;
+  late String token;
   getUserById() async {
-    String uid = (await SharedPref().getUid())!;
-    String token = (await SharedPref().getRefreshToken())!;
-    log("UID : $uid   || Token : $token");
-    BlocProvider.of<UserBloc>(context)
-        .add(GetUserDataEvent(uid: uid, token: token));
+    token = (await SharedPref().getRefreshToken())!;
+    if (widget.uid == null) {
+      String uid = (await SharedPref().getUid())!;
+
+      log("UID : $uid   || Token : $token");
+      BlocProvider.of<UserBloc>(context)
+          .add(GetUserDataEvent(uid: uid, token: token));
+    } else {
+      BlocProvider.of<UserBloc>(context)
+          .add(GetUserDataEvent(uid: widget.uid!, token: token));
+    }
   }
 
   @override
@@ -78,43 +89,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  "${user.followers.length}",
-                                  style: interTextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Follower",
-                                  style: interTextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  "${user.following.length}",
-                                  style: interTextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "Following",
-                                  style: interTextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            )
-                          ],
-                        )
+                        user.followers!.contains(currentUserId)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "${user.followers!.length}",
+                                        style: interTextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Follower",
+                                        style: interTextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        "${user.following!.length}",
+                                        style: interTextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "Following",
+                                        style: interTextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              )
+                            : CustomButton(
+                                voidCallback: () async {
+                                  BlocProvider.of<UserBloc>(context).add(
+                                      FollowUserEvent(
+                                          currentUserId: currentUserId,
+                                          userToFollowId: widget.uid!,
+                                          token: token));
+                                  setState(() {});
+                                },
+                                title: "Follow")
                       ],
                     ),
                   ),
@@ -179,5 +202,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
     );
+  }
+
+  currUserUid() async {
+    currentUserId = (await SharedPref().getUid())!;
   }
 }

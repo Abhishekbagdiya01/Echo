@@ -24,16 +24,22 @@ class UserRepository {
   }
 
   Future searchUserByName(String userName, token) async {
-    final response = await client.post(
+    final response = await client.get(
         Uri.parse(endPoint("searchUser/?search=$userName")),
         headers: {'Authorization': 'Bearer $token'});
+    log(endPoint("searchUser/?search=$userName"));
+
     if (response.statusCode == 200) {
-    } else {}
+      print(jsonDecode(response.body));
+      return jsonDecode(response.body);
+    } else {
+      throw ServerException(errorMessage: jsonDecode(response.body));
+    }
   }
 
   followUser(currentUserUid, userToFollowId, token) async {
     final response = await client.post(
-        Uri.parse(endPoint("$currentUserUid/$userToFollowId")),
+        Uri.parse(endPoint("follow/$currentUserUid/$userToFollowId")),
         headers: {'Authorization': 'Bearer $token'});
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['message'];
