@@ -28,3 +28,13 @@ class FollowUserEvent extends UserBlocEvent {
       required this.userToFollowId,
       required this.token});
 }
+
+class UnfollowUserEvent extends UserBlocEvent {
+  String currentUserId;
+  String userToUnfollowId;
+  String token;
+  UnfollowUserEvent(
+      {required this.currentUserId,
+      required this.userToUnfollowId,
+      required this.token});
+}

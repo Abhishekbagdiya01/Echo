@@ -37,11 +37,27 @@ class UserRepository {
     }
   }
 
+//Follow user
   followUser(currentUserUid, userToFollowId, token) async {
     final response = await client.post(
         Uri.parse(endPoint("follow/$currentUserUid/$userToFollowId")),
         headers: {'Authorization': 'Bearer $token'});
     if (response.statusCode == 200) {
+      print(jsonDecode(response.body)['message']);
+      return jsonDecode(response.body)['message'];
+    } else {
+      throw ServerException(errorMessage: jsonDecode(response.body)['message']);
+    }
+  }
+
+//Unfollow user
+
+  unFollowUser(currentUserUid, userToUnfollowId, token) async {
+    final response = await client.post(
+        Uri.parse(endPoint("unfollow/$currentUserUid/$userToUnfollowId")),
+        headers: {'Authorization': 'Bearer $token'});
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body)['message']);
       return jsonDecode(response.body)['message'];
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)['message']);

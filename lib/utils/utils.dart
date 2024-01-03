@@ -1,5 +1,5 @@
 String endPoint(String endPoint) {
-  return "http://192.168.197.235:5000/api/$endPoint";
+  return "http://192.168.197.92:5000/api/$endPoint";
 }
 
 Map<String, String> header = {

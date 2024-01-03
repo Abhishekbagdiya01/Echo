@@ -52,7 +52,32 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
           emit(UserBlocLoadingState());
           String successMessage = await UserRepository().followUser(
               event.currentUserId, event.userToFollowId, event.token);
+          log(successMessage);
           emit(UserBlocSuccessState(successMessage: successMessage));
+
+          UserDataModel userData = await UserRepository()
+              .getUserById(event.userToFollowId, event.token);
+          log(userData.toString());
+          emit(UserBlocLoadedState(userData: userData));
+        } on ServerException catch (errorMessage) {
+          emit(UserBlocErrorState(errorMessage: errorMessage.toString()));
+        }
+      },
+    );
+
+    on<UnfollowUserEvent>(
+      (event, emit) async {
+        try {
+          emit(UserBlocLoadingState());
+          String successMessage = await UserRepository().unFollowUser(
+              event.currentUserId, event.userToUnfollowId, event.token);
+          log(successMessage);
+          emit(UserBlocSuccessState(successMessage: successMessage));
+
+          UserDataModel userData = await UserRepository()
+              .getUserById(event.userToUnfollowId, event.token);
+          log(userData.toString());
+          emit(UserBlocLoadedState(userData: userData));
         } on ServerException catch (errorMessage) {
           emit(UserBlocErrorState(errorMessage: errorMessage.toString()));
         }

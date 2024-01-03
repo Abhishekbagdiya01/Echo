@@ -22,12 +22,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+
     getUserById();
     currUserUid();
   }
 
-  late String currentUserId;
+  String? currentUserId;
   late String token;
+  currUserUid() async {
+    currentUserId = (await SharedPref().getUid())!;
+  }
+
   getUserById() async {
     token = (await SharedPref().getRefreshToken())!;
     if (widget.uid == null) {
@@ -69,8 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 90,
-                          backgroundImage: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt5UNMp6k30E5NpJ2mj0XG22WDOot8OPCV8HSPpOVzfJoV786vphcmZlJetw_IvpR15rY&usqp=CAU"),
+                          // backgroundImage: NetworkImage(
+                          //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt5UNMp6k30E5NpJ2mj0XG22WDOot8OPCV8HSPpOVzfJoV786vphcmZlJetw_IvpR15rY&usqp=CAU"),
                         ),
                         SizedBox(
                           height: 10,
@@ -132,12 +137,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 voidCallback: () async {
                                   BlocProvider.of<UserBloc>(context).add(
                                       FollowUserEvent(
-                                          currentUserId: currentUserId,
+                                          currentUserId: currentUserId!,
                                           userToFollowId: widget.uid!,
                                           token: token));
-                                  setState(() {});
                                 },
-                                title: "Follow")
+                                title: "Follow"),
+                        user.followers!.contains(currentUserId)
+                            ? Padding(
+                                padding: const EdgeInsets.only(left: 15),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: SizedBox(
+                                      width: 100,
+                                      height: 50,
+                                      child: CustomButton(
+                                          voidCallback: () {
+                                            BlocProvider.of<UserBloc>(context)
+                                                .add(UnfollowUserEvent(
+                                                    currentUserId:
+                                                        currentUserId!,
+                                                    userToUnfollowId:
+                                                        widget.uid!,
+                                                    token: token));
+
+                                            log("Hello");
+                                          },
+                                          title: "Unfollow")),
+                                ),
+                              )
+                            : SizedBox()
                       ],
                     ),
                   ),
@@ -202,9 +230,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
     );
-  }
-
-  currUserUid() async {
-    currentUserId = (await SharedPref().getUid())!;
   }
 }
