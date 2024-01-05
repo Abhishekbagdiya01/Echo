@@ -19,7 +19,7 @@ class UserRepository {
       log(response.body);
       return UserDataModel.fromJson(jsonDecode(response.body));
     } else {
-      throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+      throw ServerException(errorMessage: jsonDecode(response.body)['message']);
     }
   }
 
@@ -62,5 +62,45 @@ class UserRepository {
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)['message']);
     }
+  }
+
+// Fetch followers
+  Future<List<UserDataModel>> fetchFollowers(
+      {required List followerUid, token}) async {
+    List<UserDataModel> followerList = [];
+
+    for (var i = 0; i < followerUid.length; i++) {
+      final user = await getUserById(followerUid[i], token);
+      followerList.add(user);
+      print("FetchFollowers: ${followerList[i].username}");
+    }
+
+    return followerList;
+  }
+
+// fetch following
+
+  Future<List> fetchFollowing(
+      {required List followingUid, required token}) async {
+    List<UserDataModel> followingList = [];
+
+    for (var i = 0; i < followingUid.length; i++) {
+      final user = await getUserById(followingUid[i], token);
+      followingList.add(user);
+      print("FetchFollowers: ${followingList[i].username}");
+    }
+
+    return followingList;
+  }
+
+  //Upload profile picture
+
+  uploadProfilePicture(String uid, image) {
+    final request =
+        http.MultipartRequest('PUT', Uri.parse(endPoint("uploadImg/$uid")));
+    request.files.add(http.MultipartFile.fromBytes(
+        'image', // Field name in your Node.js API
+        image,
+        filename: image!.path.split('/').last));
   }
 }

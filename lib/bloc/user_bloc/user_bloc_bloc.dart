@@ -83,5 +83,18 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
         }
       },
     );
+
+    on<FetchFollowersEvent>((event, emit) async {
+      try {
+        emit(UserBlocLoadingState());
+        List<UserDataModel> followerList = await UserRepository()
+            .fetchFollowers(
+                followerUid: event.followersUid, token: event.token);
+        log("FetchFollowerEvent Token:${event.token}");
+        emit(FollowersLoadedState(followerList: followerList));
+      } on ServerException catch (e) {
+        emit(UserBlocErrorState(errorMessage: e.errorMessage));
+      }
+    });
   }
 }

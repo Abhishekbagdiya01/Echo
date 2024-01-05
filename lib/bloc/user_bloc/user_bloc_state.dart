@@ -38,3 +38,10 @@ class UserBlocErrorState extends UserBlocState {
     required this.errorMessage,
   });
 }
+
+class FollowersLoadedState extends UserBlocState {
+  List<UserDataModel> followerList;
+  FollowersLoadedState({
+    required this.followerList,
+  });
+}

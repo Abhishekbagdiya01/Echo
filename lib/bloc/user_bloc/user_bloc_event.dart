@@ -38,3 +38,12 @@ class UnfollowUserEvent extends UserBlocEvent {
       required this.userToUnfollowId,
       required this.token});
 }
+
+class FetchFollowersEvent extends UserBlocEvent {
+  List followersUid;
+  String token;
+  FetchFollowersEvent({
+    required this.followersUid,
+    required this.token,
+  });
+}
