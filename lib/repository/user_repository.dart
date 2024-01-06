@@ -95,12 +95,36 @@ class UserRepository {
 
   //Upload profile picture
 
-  uploadProfilePicture(String uid, image) {
-    final request =
-        http.MultipartRequest('PUT', Uri.parse(endPoint("uploadImg/$uid")));
-    request.files.add(http.MultipartFile.fromBytes(
-        'image', // Field name in your Node.js API
-        image,
-        filename: image!.path.split('/').last));
+  uploadProfilePicture(String uid, String imagePath, token) async {
+    log("image path : $imagePath");
+
+    final response = await client.put(
+        Uri.parse(
+          endPoint("uploadImg/$uid"),
+        ),
+        headers: {'Authorization': 'Bearer $token'},
+        body: {"filePath": imagePath});
+
+    if (response.statusCode == 200) {
+      jsonDecode(response.body)["message"];
+    } else {
+      throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
+    }
   }
+
+  //Upload profile picture
+
+  // deleteProfileImage(String uid, String token) async {
+  //   final response = await client.delete(
+  //       Uri.parse(
+  //         endPoint("deleteProfilePhoto/$uid"),
+  //       ),
+  //       headers: {'Authorization': 'Bearer $token'});
+  //   print(jsonDecode(response.body));
+  //   if (response.statusCode == 200) {
+  //     print(jsonDecode(response.body));
+  //   } else {
+  //     throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+  //   }
+  // }
 }

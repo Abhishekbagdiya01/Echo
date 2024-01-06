@@ -1,13 +1,17 @@
 import 'package:echo/bloc/auth_bloc/auth_bloc.dart';
 import 'package:echo/bloc/credential_cubit/credential_cubit_bloc.dart';
 import 'package:echo/bloc/user_bloc/user_bloc_bloc.dart';
+import 'package:echo/firebase_options.dart';
 import 'package:echo/route/on_generated_routes.dart';
 import 'package:echo/screens/splash_screen/splash_screen.dart';
 import 'package:echo/utils/colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
       create: (context) => CredentialCubitBloc(),

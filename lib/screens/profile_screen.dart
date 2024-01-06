@@ -3,9 +3,12 @@ import 'dart:typed_data';
 
 import 'package:echo/bloc/user_bloc/user_bloc_bloc.dart';
 import 'package:echo/model/user_model.dart';
+import 'package:echo/repository/user_repository.dart';
 import 'package:echo/screens/follower_following_screen.dart';
 import 'package:echo/utils/colors.dart';
+import 'package:echo/utils/firestore_method.dart';
 import 'package:echo/utils/image_picker.dart';
+
 import 'package:echo/utils/shared_pref.dart';
 import 'package:echo/widgets/custom_button.dart';
 import 'package:echo/widgets/post_card.dart';
@@ -60,6 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return CircularProgressIndicator();
         } else if (state is UserBlocLoadedState) {
           UserDataModel user = state.userData;
+
           return DefaultTabController(
             length: 2,
             child: Scaffold(
@@ -93,7 +97,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       onTap: () async {
                                         image =
                                             await pickImage(ImageSource.camera);
-                                        print(image);
+
+                                        String imgPath = await StorageMethods()
+                                            .uploadImageToStorage(
+                                                file: image!,
+                                                uid: currentUserId);
+                                        log(imgPath);
+
+                                        UserRepository().uploadProfilePicture(
+                                            currentUserId!, imgPath, token);
+
+                                        Navigator.pop(context);
+                                        setState(() {});
                                       },
                                     ),
                                     ListTile(
@@ -102,6 +117,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       onTap: () async {
                                         image = await pickImage(
                                             ImageSource.gallery);
+                                        String imgPath = await StorageMethods()
+                                            .uploadImageToStorage(
+                                                file: image!,
+                                                uid: currentUserId);
+                                        log(imgPath);
+                                        UserRepository().uploadProfilePicture(
+                                            currentUserId!, imgPath, token);
+
+                                        Navigator.pop(context);
+                                        setState(() {});
                                       },
                                     ),
                                   ],
@@ -111,8 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: CircleAvatar(
                             radius: 90,
-                            // backgroundImage: NetworkImage(
-                            //     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt5UNMp6k30E5NpJ2mj0XG22WDOot8OPCV8HSPpOVzfJoV786vphcmZlJetw_IvpR15rY&usqp=CAU"),
+                            backgroundImage: NetworkImage(user.profileImage!),
                           ),
                         ),
                         SizedBox(
