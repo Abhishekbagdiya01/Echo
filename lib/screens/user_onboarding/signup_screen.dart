@@ -157,6 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               dropDownValue != "Age" &&
                               selectedERadio.isNotEmpty) {
                             UserModel user = UserModel(
+                                uid: "",
                                 firstName: firstNController.text,
                                 lastName: lastNController.text,
                                 ageGroup: dropDownValue,

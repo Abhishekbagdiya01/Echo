@@ -127,4 +127,16 @@ class UserRepository {
   //     throw ServerException(errorMessage: jsonDecode(response.body)['error']);
   //   }
   // }
+
+// Extract user details from list of uid's
+  Future<List<UserDataModel>> fetchUserDetailByUid(
+      List listOfUid, token) async {
+    List<UserDataModel> userList = [];
+    for (var i = 0; i < listOfUid.length; i++) {
+      final user = await getUserById(listOfUid[i], token);
+      userList.add(user);
+      print("FetchFollowers: ${userList[i].username}");
+    }
+    return userList;
+  }
 }

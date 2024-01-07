@@ -1,23 +1,38 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'package:echo/repository/post_repository.dart';
 import 'package:echo/utils/colors.dart';
 import 'package:echo/widgets/audio_player.dart';
 import 'package:echo/widgets/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
 class postCard extends StatefulWidget {
   postCard({
     Key? key,
+    this.uid,
+    this.token,
     required this.username,
     required this.profileUrl,
-    required this.location,
     required this.content,
     required this.postType,
+    required this.postid,
+    required this.comments,
+    required this.likes,
   }) : super(key: key);
+
+  final String? uid;
+  final String? token;
   final String username;
   final String profileUrl;
-  final String location;
+
   final String content;
   final String postType;
+  final String postid;
+  final List comments;
+  final List likes;
 
   @override
   State<postCard> createState() => _postCardState();
@@ -48,10 +63,6 @@ class _postCardState extends State<postCard> {
                   style: GoogleFonts.roboto(
                       fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(
-                  widget.location,
-                  style: GoogleFonts.roboto(fontSize: 18, color: Colors.grey),
-                ),
                 trailing: OutlinedButton(
                   onPressed: () {},
                   child: const Text("Follow"),
@@ -74,12 +85,17 @@ class _postCardState extends State<postCard> {
               ),
               ListTile(
                 leading: InkWell(
-                  onTap: () {
-                    if (isLike) {
-                      isLike = false;
+                  onTap: () async {
+                    log("token : ${widget.token} || uid: ${widget.uid} ");
+                    if (widget.likes.contains(widget.uid)) {
+                      final response = await PostRepository().dislikePost(
+                          widget.uid!, widget.postid, widget.token!);
+                      print(response);
                       setState(() {});
                     } else {
-                      isLike = true;
+                      final response = await PostRepository()
+                          .likePost(widget.uid!, widget.postid, widget.token!);
+                      print(response);
                       setState(() {});
                     }
                   },
@@ -90,7 +106,7 @@ class _postCardState extends State<postCard> {
                         children: [
                           Icon(
                             Icons.thumb_up,
-                            color: isLike
+                            color: widget.likes.contains(widget.uid)
                                 ? Colors.red
                                 : Colors.black.withOpacity(0.6),
                           ),
@@ -98,11 +114,13 @@ class _postCardState extends State<postCard> {
                             width: 10,
                           ),
                           Text(
-                            isLike ? "13" : "12",
+                            isLike
+                                ? "${widget.likes.length}"
+                                : "${widget.likes.length}",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
-                                color: isLike
+                                color: widget.likes.contains(widget.uid)
                                     ? Colors.red
                                     : Colors.black.withOpacity(0.6)),
                           )
@@ -163,6 +181,15 @@ class _postCardState extends State<postCard> {
               ),
               Divider(
                 thickness: 2,
+              ),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.3,
+                child: ListView.builder(
+                  itemCount: widget.comments.length,
+                  itemBuilder: (context, index) => ListTile(
+                    title: Text(""),
+                  ),
+                ),
               ),
               Expanded(
                 child: Align(

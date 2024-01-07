@@ -2,17 +2,40 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:echo/repository/post_repository.dart';
 import 'package:echo/screens/recorder_screen.dart';
+import 'package:echo/utils/shared_pref.dart';
 
 import 'package:echo/widgets/custom_button.dart';
+import 'package:echo/widgets/snackbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UploadPostScreen extends StatelessWidget {
+class UploadPostScreen extends StatefulWidget {
   UploadPostScreen({this.audioFile, super.key});
-  final TextEditingController postController = TextEditingController();
   File? audioFile;
+
+  @override
+  State<UploadPostScreen> createState() => _UploadPostScreenState();
+}
+
+class _UploadPostScreenState extends State<UploadPostScreen> {
+  final TextEditingController postController = TextEditingController();
+  String? uid;
+  String? token;
+  getUidToken() async {
+    uid = (await SharedPref().getUid())!;
+    token = (await SharedPref().getRefreshToken())!;
+    log("UID : $uid   || Token : $token");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUidToken();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +60,14 @@ class UploadPostScreen extends StatelessWidget {
                     border: Border.all(
                       style: BorderStyle.solid,
                     )),
-                child: TextField(
-                  controller: postController,
-                  maxLength: 300,
-                  maxLines: 5,
-                  decoration: InputDecoration(border: InputBorder.none),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: postController,
+                    maxLength: 300,
+                    maxLines: 5,
+                    decoration: InputDecoration(border: InputBorder.none),
+                  ),
                 ),
               ),
               SizedBox(
@@ -64,7 +90,7 @@ class UploadPostScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          audioFile != null
+                          widget.audioFile != null
                               ? Icon(Icons.play_arrow)
                               : Image.asset("assets/images/audio_icon.png"),
                           Text("Upload Audio")
@@ -76,12 +102,19 @@ class UploadPostScreen extends StatelessWidget {
                 height: 60,
               ),
               CustomButton(
-                  voidCallback: () {
-                    if (audioFile != null || postController.text.isNotEmpty) {
+                  voidCallback: () async {
+                    if (widget.audioFile != null ||
+                        postController.text.isNotEmpty) {
                       //   audioFile!.readAsBytes();
-
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                      if (postController.text.isNotEmpty &&
+                          widget.audioFile == null) {
+                        String message = await PostRepository().createPost(
+                            uid!, "text", "", token!, postController.text);
+                        Navigator.pop(context);
+                        snackbarMessenger(context, message);
+                      } else {
+                        log("Not implemented yet");
+                      }
                     }
                   },
                   title: "Save")
@@ -126,7 +159,7 @@ class UploadPostScreen extends StatelessWidget {
     log("$result");
     if (result != null) {
       File file = File(result.files.single.path!);
-      audioFile = file;
+      widget.audioFile = file;
 
       print(file);
     } else {

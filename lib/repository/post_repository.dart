@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:echo/repository/server_exception.dart';
 import 'package:echo/utils/utils.dart';
@@ -25,6 +26,7 @@ class PostRepository {
         });
 
     if (response.statusCode == 200) {
+      print(jsonDecode(response.body)['message']);
       return jsonDecode(response.body)['message'];
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)['error']);
@@ -49,7 +51,7 @@ class PostRepository {
 
 //getAllPost
   fetchAllPost(String uid, String token) async {
-    final response = await client.post(
+    final response = await client.get(
       Uri.parse(
         endPoint("getAllPost/$uid?page=1"),
       ),
@@ -57,7 +59,8 @@ class PostRepository {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['message'];
+      print("HomeScreen : ${jsonDecode(response.body)['posts']}");
+      return jsonDecode(response.body)['posts'];
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)['error']);
     }
@@ -75,7 +78,7 @@ class PostRepository {
         body: {
           "userId": uid,
         });
-
+    log(response.body);
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['message'];
     } else {
@@ -84,7 +87,7 @@ class PostRepository {
   }
 
   //unlikePost
-  unlikePost(String uid, String postId, String token) async {
+  dislikePost(String uid, String postId, String token) async {
     final response = await client.post(
         Uri.parse(
           endPoint("unlikePost/$postId"),

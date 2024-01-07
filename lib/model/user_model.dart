@@ -22,14 +22,14 @@ class UserModel {
       this.password});
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    uid = json['_id'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    ageGroup = json['ageGroup'];
-    gender = json['gender'];
-    username = json['username'];
-    email = json['email'];
-    password = json['password'];
+    uid = json['_id'] ?? '';
+    firstName = json['firstName'] ?? '';
+    lastName = json['lastName'] ?? '';
+    ageGroup = json['ageGroup'] ?? '';
+    gender = json['gender'] ?? '';
+    username = json['username'] ?? '';
+    email = json['email'] ?? '';
+    password = json['password'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

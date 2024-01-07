@@ -10,17 +10,30 @@ import 'package:http/http.dart' as http;
 class AuthRepository {
   http.Client client = http.Client();
 
-  Future<String> signUp(UserModel userModel) async {
-    final encodedParam = jsonEncode(userModel);
+  Future<String> signUp(
+    UserModel userModel,
+  ) async {
+    print(
+        "${userModel.firstName} || ${userModel.lastName} ||${userModel.ageGroup} ||${userModel.gender} ||${userModel.username} || ${userModel.email} ||${userModel.password} || ");
+    final encodedParam = jsonEncode({
+      "firstName": userModel.firstName,
+      "lastName": userModel.lastName,
+      "ageGroup": userModel.ageGroup,
+      "gender": userModel.gender,
+      "username": userModel.username,
+      "email": userModel.email,
+      "password": userModel.password
+    });
 
     final response = await client.post(Uri.parse(endPoint("signUp")),
         body: encodedParam, headers: header);
-
+    log(response.body);
     if (response.statusCode == 200) {
       final userId = jsonDecode(response.body)['id'];
 
       return userId;
     } else {
+      print(jsonDecode(response.body)["error"]);
       throw ServerException(errorMessage: jsonDecode(response.body)["error"]);
     }
   }

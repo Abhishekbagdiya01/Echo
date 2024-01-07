@@ -1,46 +1,69 @@
-import 'package:equatable/equatable.dart';
-
-class PostModel extends Equatable {
+class PostModel {
   String username;
-  String profileUrl;
-  String location;
-  int likesCount;
-  String postType;
+  String firstName;
+  String lastName;
+  String profileImage;
+  bool isFollowed;
+  String postId;
+  String content;
+  String audioPath;
+  List<dynamic> likes;
+  List<String> comments;
+  String createdAt;
+
   PostModel({
     required this.username,
-    required this.profileUrl,
-    required this.location,
-    required this.likesCount,
-    required this.postType,
+    required this.firstName,
+    required this.lastName,
+    required this.profileImage,
+    required this.isFollowed,
+    required this.postId,
+    required this.content,
+    required this.audioPath,
+    required this.likes,
+    required this.comments,
+    required this.createdAt,
   });
 
-  factory PostModel.fromJson(Map<String, dynamic> map) {
+  factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-        username: map["username"],
-        profileUrl: map["profileUrl"],
-        location: map["location"],
-        likesCount: map["likesCount"],
-        postType: map["postType"]);
+      username: json['username'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      profileImage: json['profileImage'] ?? '',
+      isFollowed: json['isFollowed'] ?? false,
+      postId: json['postId'] ?? '',
+      content: json['content'] ?? '',
+      audioPath: json['audioPath'] ?? '',
+      likes: json['likes'] ?? [],
+      comments: List<String>.from(json['comments'] ?? []),
+      createdAt: json['createdAt'] ?? '',
+    );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      "username": username,
-      "profileUrl": profileUrl,
-      "location": location,
-      "likesCount": likesCount,
-      "postType": postType,
-    };
-  }
+class PostsResponse {
+  List<PostModel> posts;
+  int current;
+  int total;
 
-  @override
-  List<Object> get props {
-    return [
-      username,
-      profileUrl,
-      location,
-      likesCount,
-      postType,
-    ];
+  PostsResponse({
+    required this.posts,
+    required this.current,
+    required this.total,
+  });
+
+  factory PostsResponse.fromJson(Map<String, dynamic> json) {
+    List<PostModel> posts = <PostModel>[];
+    if (json['posts'] != null) {
+      json['posts'].forEach((v) {
+        posts.add(PostModel.fromJson(v));
+      });
+    }
+    return PostsResponse(
+      posts: posts,
+      current: json['current'] ?? 0,
+      total: json['total'] ?? 0,
+    );
   }
 }

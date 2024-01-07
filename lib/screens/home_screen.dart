@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:echo/bloc/user_bloc/user_bloc_bloc.dart';
+import 'package:echo/model/post_model.dart';
+import 'package:echo/model/user_model.dart';
+import 'package:echo/repository/post_repository.dart';
 import 'package:echo/route/page_const.dart';
 import 'package:echo/screens/chat_screens/chat_scree.dart';
 import 'package:echo/utils/global_variables.dart';
@@ -23,12 +26,22 @@ class _HomeScreenState extends State<HomeScreen> {
     getUserById();
   }
 
+  String? currentUserId;
+  late String token;
+  List allPost = [];
   getUserById() async {
     String uid = (await SharedPref().getUid())!;
-    String token = (await SharedPref().getRefreshToken())!;
+    token = (await SharedPref().getRefreshToken())!;
     log("UID : $uid   || Token : $token");
     BlocProvider.of<UserBloc>(context)
         .add(GetUserDataEvent(uid: uid, token: token));
+    final res = await PostRepository().fetchAllPost(uid, token);
+    log("response : $res");
+    allPost = res;
+
+    setState(() {
+      currentUserId = uid;
+    });
   }
 
   @override
@@ -69,15 +82,19 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: ListView.builder(
           padding: EdgeInsets.all(10),
-          itemCount: dummyData.length,
+          itemCount: allPost.length,
           itemBuilder: (context, index) {
-            return Container();
-            // return postCard(
-            //     username: dummyData[index]["name"],
-            //     profileUrl: dummyData[index]["profileUrl"],
-            //     location: dummyData[index]["location"],
-            //     postType: dummyData[index]["postType"],
-            //     content: dummyData[index]["content"]);
+            return postCard(
+              uid: currentUserId!,
+              token: token,
+              postid: allPost[index]['postId'],
+              username: allPost[index]['username'],
+              profileUrl: allPost[index]['profileImage'],
+              postType: allPost[index]['audioPath'] == null ? 'Text' : 'Audio',
+              content: allPost[index]['content'],
+              comments: allPost[index]['comments'],
+              likes: allPost[index]['likes'],
+            );
           },
         ),
       ),
