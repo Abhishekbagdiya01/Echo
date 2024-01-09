@@ -47,3 +47,12 @@ class FetchFollowersEvent extends UserBlocEvent {
     required this.token,
   });
 }
+
+class FetchAllPostEvent extends UserBlocEvent {
+  String uid;
+  String token;
+  FetchAllPostEvent({
+    required this.uid,
+    required this.token,
+  });
+}

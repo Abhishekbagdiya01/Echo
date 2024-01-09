@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:echo/model/user_model.dart';
+import 'package:echo/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,9 +20,10 @@ class postCard extends StatefulWidget {
     required this.profileUrl,
     required this.content,
     required this.postType,
-    required this.postid,
+    required this.postId,
     required this.comments,
     required this.likes,
+    required this.fetchUserData,
   }) : super(key: key);
 
   final String? uid;
@@ -30,16 +33,38 @@ class postCard extends StatefulWidget {
 
   final String content;
   final String postType;
-  final String postid;
+  final String postId;
   final List comments;
   final List likes;
-
+  final Function fetchUserData;
   @override
   State<postCard> createState() => _postCardState();
 }
 
 class _postCardState extends State<postCard> {
   bool isLike = false;
+  List allComments = [];
+  List<UserDataModel> userDataArr = [];
+  void fetchComments() async {
+    for (int i = 0; i < widget.comments.length; i++) {
+      print(widget.comments[i]);
+      final response = await PostRepository()
+          .getAllComments(widget.uid!, widget.comments[i], widget.token!);
+      allComments.add(response);
+
+      UserDataModel userData = await UserRepository()
+          .getUserById(allComments[i]["userId"], widget.token);
+
+      userDataArr.add(userData);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchComments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,14 +114,18 @@ class _postCardState extends State<postCard> {
                     log("token : ${widget.token} || uid: ${widget.uid} ");
                     if (widget.likes.contains(widget.uid)) {
                       final response = await PostRepository().dislikePost(
-                          widget.uid!, widget.postid, widget.token!);
+                          widget.uid!, widget.postId, widget.token!);
                       print(response);
-                      setState(() {});
+                      setState(() {
+                        widget.fetchUserData();
+                      });
                     } else {
                       final response = await PostRepository()
-                          .likePost(widget.uid!, widget.postid, widget.token!);
+                          .likePost(widget.uid!, widget.postId, widget.token!);
                       print(response);
-                      setState(() {});
+                      setState(() {
+                        widget.fetchUserData();
+                      });
                     }
                   },
                   child: SizedBox(
@@ -161,6 +190,7 @@ class _postCardState extends State<postCard> {
   }
 
   void bottomCommentSheet(BuildContext context) {
+    TextEditingController commentController = TextEditingController();
     showBottomSheet(
       context: context,
       builder: (context) => Container(
@@ -185,16 +215,42 @@ class _postCardState extends State<postCard> {
               SizedBox(
                 height: MediaQuery.sizeOf(context).height * 0.3,
                 child: ListView.builder(
-                  itemCount: widget.comments.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(""),
-                  ),
-                ),
+                    itemCount: widget.comments.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: userDataArr[index].profileImage != ""
+                            ? CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    "${userDataArr[index].profileImage}"))
+                            : CircleAvatar(),
+                        title: Text("${userDataArr[index].username}"),
+                        subtitle: Text(
+                          "${allComments[index]['text']}",
+                          style: TextStyle(fontSize: 22),
+                        ),
+                      );
+                    }),
               ),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: TextField(
+                      controller: commentController,
+                      onEditingComplete: () async {
+                        if (commentController.text.isNotEmpty) {
+                          final response = await PostRepository().postComment(
+                              widget.uid!,
+                              widget.postId,
+                              widget.token!,
+                              commentController.text);
+                          log(response);
+                          Navigator.pop(context);
+                          widget.fetchUserData();
+                          setState(() {
+                            widget.fetchUserData();
+                          });
+                        }
+                      },
                       decoration: InputDecoration(
                           hintText: "Add comments for...",
                           suffixIcon: Icon(Icons.send),

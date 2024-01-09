@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:echo/model/user_model.dart';
+import 'package:echo/repository/post_repository.dart';
 import 'package:echo/repository/server_exception.dart';
 import 'package:echo/repository/user_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -96,5 +97,16 @@ class UserBloc extends Bloc<UserBlocEvent, UserBlocState> {
         emit(UserBlocErrorState(errorMessage: e.errorMessage));
       }
     });
+
+    // on<FetchAllPostEvent>((event, emit) async {
+    //   try {
+    //     emit(UserBlocLoadingState());
+    //     final allPostList =
+    //         await PostRepository().fetchAllPost(event.uid, event.token);
+    //     emit(fetchAllPostState(allPost: allPostList));
+    //   } on ServerException catch (e) {
+    //     emit(UserBlocErrorState(errorMessage: e.errorMessage));
+    //   }
+    // });
   }
 }

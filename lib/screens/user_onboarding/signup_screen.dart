@@ -137,16 +137,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   BlocListener<CredentialCubitBloc, CredentialCubitState>(
                     listener: (context, state) {
-                      if (state is CredentialLoadingState) {
-                        Center(child: CircularProgressIndicator());
-                      } else if (state is CredentialSuccessState) {
-                        BlocProvider.of<AuthBloc>(context)
-                            .add(LoggedIn(uid: state.userId));
-                        Navigator.pushReplacementNamed(
-                            context, PageConst.HomeScreen);
-                      } else if (state is CredentialErrorState) {
-                        snackbarMessenger(context, state.errorMessage);
-                      }
+                      Navigator.pushReplacementNamed(
+                          context, PageConst.LoginScreen);
+                      // if (state is CredentialLoadingState) {
+                      //   Center(child: CircularProgressIndicator());
+                      // } else if (state is CredentialSuccessState) {
+                      //   // BlocProvider.of<AuthBloc>(context)
+                      //   //     .add(LoggedIn(uid: state.userId));
+                      //   Navigator.pushReplacementNamed(
+                      //       context, PageConst.LoginScreen);
+                      // } else if (state is CredentialErrorState) {
+                      //   snackbarMessenger(context, state.errorMessage);
+                      // }
                     },
                     child: CustomButton(
                         voidCallback: () {

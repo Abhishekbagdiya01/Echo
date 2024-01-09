@@ -51,6 +51,7 @@ class UserModel {
 
 class UserDataModel {
   UserDataModel({
+    this.uid,
     this.firstName,
     this.lastName,
     this.ageGroup,
@@ -65,6 +66,7 @@ class UserDataModel {
     this.notifications,
     this.posts,
   });
+  String? uid;
   late final String? firstName;
   late final String? lastName;
   late final String? ageGroup;
@@ -80,6 +82,7 @@ class UserDataModel {
   late final Posts? posts;
 
   UserDataModel.fromJson(Map<String, dynamic> json) {
+    uid = json['_id'] ?? '';
     firstName = json['firstName'];
     lastName = json['lastName'];
     ageGroup = json['ageGroup'];

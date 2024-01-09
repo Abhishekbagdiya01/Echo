@@ -45,3 +45,10 @@ class FollowersLoadedState extends UserBlocState {
     required this.followerList,
   });
 }
+
+class fetchAllPostState extends UserBlocState {
+  List allPost;
+  fetchAllPostState({
+    required this.allPost,
+  });
+}

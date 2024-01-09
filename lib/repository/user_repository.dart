@@ -19,6 +19,7 @@ class UserRepository {
       log(response.body);
       return UserDataModel.fromJson(jsonDecode(response.body));
     } else {
+      print("jsonDecode(response.body)['message']");
       throw ServerException(errorMessage: jsonDecode(response.body)['message']);
     }
   }
@@ -138,5 +139,19 @@ class UserRepository {
       print("FetchFollowers: ${userList[i].username}");
     }
     return userList;
+  }
+
+  //Delete user
+
+  deleteUser(String uid, token) async {
+    final response = await client.delete(Uri.parse(endPoint("deleteUser/$uid")),
+        headers: {'Authorization': 'Bearer $token'});
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body)['message']);
+      return jsonDecode(response.body)['message'];
+    } else {
+      print(jsonDecode(response.body)['message']);
+      // throw ServerException(errorMessage: jsonDecode(response.body)['message']);
+    }
   }
 }

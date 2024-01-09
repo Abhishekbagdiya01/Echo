@@ -18,8 +18,8 @@ class CredentialCubitBloc
       try {
         emit(CredentialLoadingState());
 
-        String userId = await authRepository.signUp(event.userModel);
-        emit(CredentialSuccessState(userId: userId));
+        // String userId = await authRepository.signUp(event.userModel);
+        emit(CredentialSuccessState(userId: ""));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));
       }
@@ -29,6 +29,7 @@ class CredentialCubitBloc
       try {
         emit(CredentialLoadingState());
         String userId = await authRepository.logIn(event.userModel);
+        print(userId);
         emit(CredentialSuccessState(userId: userId));
       } on ServerException catch (e) {
         emit(CredentialErrorState(errorMessage: e.errorMessage));

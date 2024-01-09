@@ -34,8 +34,9 @@ class PostRepository {
   }
 
   //deletePost
-  deletePost(String uid, String postId, String token) async {
-    final response = await client.post(
+  deletePost(String postId, String token) async {
+    log("POSTID : $postId");
+    final response = await client.delete(
       Uri.parse(
         endPoint("deletePost/$postId"),
       ),
@@ -45,7 +46,8 @@ class PostRepository {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['message'];
     } else {
-      throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+      print(jsonDecode(response.body)['error']);
+      //throw ServerException(errorMessage: jsonDecode(response.body)['error']);
     }
   }
 
@@ -82,7 +84,8 @@ class PostRepository {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['message'];
     } else {
-      throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+      print(jsonDecode(response.body)['error']);
+      // throw ServerException(errorMessage: jsonDecode(response.body)['error']);
     }
   }
 
@@ -102,7 +105,8 @@ class PostRepository {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['message'];
     } else {
-      throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+      log(jsonDecode(response.body)['error']);
+      // throw ServerException(errorMessage: jsonDecode(response.body)['error']);
     }
   }
 
@@ -117,6 +121,22 @@ class PostRepository {
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['message'];
+    } else {
+      throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+    }
+  }
+  //getComment/659a66e8b33c2c8a719fae6e
+
+  getAllComments(String uid, String postId, String token) async {
+    final response = await client.get(
+      Uri.parse(
+        endPoint("getComment/$postId"),
+      ),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)['error']);
     }
@@ -136,6 +156,23 @@ class PostRepository {
       return jsonDecode(response.body)['message'];
     } else {
       throw ServerException(errorMessage: jsonDecode(response.body)['error']);
+    }
+  }
+
+  //Notification
+  getNotifications(String uid, String token) async {
+    final response = await client.get(
+      Uri.parse(
+        endPoint("notification/$uid"),
+      ),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['notification'];
+    } else {
+      print(jsonDecode(response.body)['error']);
+      // throw ServerException(errorMessage: jsonDecode(response.body)['error']);
     }
   }
 }

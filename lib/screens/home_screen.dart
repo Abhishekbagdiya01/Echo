@@ -5,7 +5,7 @@ import 'package:echo/model/post_model.dart';
 import 'package:echo/model/user_model.dart';
 import 'package:echo/repository/post_repository.dart';
 import 'package:echo/route/page_const.dart';
-import 'package:echo/screens/chat_screens/chat_scree.dart';
+import 'package:echo/screens/chat_screens/chat_screen.dart';
 import 'package:echo/utils/global_variables.dart';
 import 'package:echo/utils/shared_pref.dart';
 import 'package:echo/widgets/post_card.dart';
@@ -35,10 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
     log("UID : $uid   || Token : $token");
     BlocProvider.of<UserBloc>(context)
         .add(GetUserDataEvent(uid: uid, token: token));
-    final res = await PostRepository().fetchAllPost(uid, token);
-    log("response : $res");
-    allPost = res;
 
+    // BlocProvider.of<UserBloc>(context)
+    //     .add(FetchAllPostEvent(uid: uid, token: token));
+
+    allPost = await PostRepository().fetchAllPost(uid, token);
+
+    print(" POST LENGTH : ${allPost.length}");
     setState(() {
       currentUserId = uid;
     });
@@ -74,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChatScreen(),
+                      builder: (context) => FamilyScreen(),
                     ));
               }),
         ],
@@ -85,9 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: allPost.length,
           itemBuilder: (context, index) {
             return postCard(
+              fetchUserData: getUserById,
               uid: currentUserId!,
               token: token,
-              postid: allPost[index]['postId'],
+              postId: allPost[index]['postId'],
               username: allPost[index]['username'],
               profileUrl: allPost[index]['profileImage'],
               postType: allPost[index]['audioPath'] == null ? 'Text' : 'Audio',
