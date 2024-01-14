@@ -1,16 +1,34 @@
-# echo
+# Echo
 
-A new Flutter project.
+**Echo - The Unwritten Share the Unheard** is more than just a social media app; it's a platform for the untold stories and unheard voices. Powered by Flutter, Echo empowers users to share their unfiltered life journeys through text and audio podcasts. Dive into a world where authenticity is celebrated, and connections are formed through experiences
 
-## Getting Started
+### Features
 
-This project is a starting point for a Flutter application.
+* Social media app
+* Simple and user-friendly interface
+* Connect with other users
+* Share text and audio as post
+* Chat with others
 
-A few resources to get you started if this is your first Flutter project:
+### Getting Started
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To get started, clone this repository and run the following commands:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  ```
+  flutter pub get
+  flutter run
+  ```
+
+### Screenshots
+
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss1.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss9.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss8.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss7.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss6.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss5.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss4.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss3.png" />
+<img src="https://github.com/Abhishekbagdiya01/Echo/blob/master/screenshots/ss2.png" />
+
+###
